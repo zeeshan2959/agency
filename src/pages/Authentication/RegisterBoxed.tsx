@@ -10,6 +10,17 @@ import IconInstagram from '../../components/Icon/IconInstagram';
 import IconFacebookCircle from '../../components/Icon/IconFacebookCircle';
 import IconTwitter from '../../components/Icon/IconTwitter';
 import IconGoogle from '../../components/Icon/IconGoogle';
+import * as Yup from 'yup';
+import { Formik, Field, Form, FormikHelpers } from 'formik';
+import signUpUser from '../../api/services/auth/auth';
+import { Toast } from '../../components/common/Toast';
+import { AxiosError } from 'axios';
+
+interface Values {
+    name: string;
+    email: string;
+    password: string;
+}
 
 const RegisterBoxed = () => {
     const dispatch = useDispatch();
@@ -17,9 +28,40 @@ const RegisterBoxed = () => {
         dispatch(setPageTitle('Register Boxed'));
     });
     const navigate = useNavigate();
+    const SignupSchema = Yup.object().shape({
+        name: Yup.string().min(2, 'Too Short!').max(70, 'Too Long!').required('Name is Required'),
+        email: Yup.string().email('Invalid email').required('Email is Required'),
+        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is Required'),
+    });
 
-    const submitForm = () => {
-        navigate('/');
+    const submitForm = async (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
+        try {
+            const res = await signUpUser(values);
+
+            if (res.status === 200) {
+                Toast('success', res.data.message || 'Signup successful!');
+                navigate('/auth/boxed-signin');
+            }
+        } catch (err) {
+            const axiosError = err as AxiosError<any>;
+
+            if (axiosError.response) {
+                const data = axiosError.response.data;
+
+                if (data.errors) {
+                    setErrors(data.errors);
+                    Toast('danger', data.message || 'Something went wrong!');
+                } else {
+                    Toast('danger', data.message || 'Something went wrong!');
+                }
+            } else if (axiosError.request) {
+                Toast('danger', 'No response from server. Please try again.');
+            } else {
+                Toast('danger', axiosError.message || 'Unexpected error occurred.');
+            }
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -40,44 +82,59 @@ const RegisterBoxed = () => {
                                 <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign Up</h1>
                                 <p className="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
                             </div>
-                            <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
-                                <div>
-                                    <label htmlFor="Name">Name</label>
-                                    <div className="relative text-white-dark">
-                                        <input id="Name" type="text" placeholder="Enter Name" className="form-input ps-10 placeholder:text-white-dark" />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconUser fill={true} />
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="Email">Email</label>
-                                    <div className="relative text-white-dark">
-                                        <input id="Email" type="email" placeholder="Enter Email" className="form-input ps-10 placeholder:text-white-dark" />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconMail fill={true} />
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="Password">Password</label>
-                                    <div className="relative text-white-dark">
-                                        <input id="Password" type="password" placeholder="Enter Password" className="form-input ps-10 placeholder:text-white-dark" />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconLockDots fill={true} />
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="flex cursor-pointer items-center">
-                                        <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
-                                        <span className="text-white-dark">Subscribe to weekly newsletter</span>
-                                    </label>
-                                </div>
-                                <button type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                    Sign Up
-                                </button>
-                            </form>
+                            <Formik
+                                initialValues={{
+                                    name: '',
+                                    email: '',
+                                    password: '',
+                                }}
+                                validationSchema={SignupSchema}
+                                onSubmit={submitForm}
+                            >
+                                {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+                                    <Form className="space-y-5 dark:text-white">
+                                        <div>
+                                            <label htmlFor="name">Name</label>
+                                            <div className="relative text-white-dark">
+                                                <Field id="name" name="name" type="text" placeholder="Enter Name" className="form-input ps-10 placeholder:text-white-dark" />
+                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                    <IconUser fill={true} />
+                                                </span>
+                                            </div>
+                                            <span className="text-red-500 mt-1 block text-[12px]">{errors.name && touched.name && errors.name}</span>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email">Email</label>
+                                            <div className="relative text-white-dark">
+                                                <Field id="email" name="email" type="email" placeholder="Enter Email" className="form-input ps-10 placeholder:text-white-dark" />
+                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                    <IconMail fill={true} />
+                                                </span>
+                                            </div>
+                                            <span className="text-red-500 mt-1 block text-[12px]">{errors.email && touched.email && errors.email}</span>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="password">Password</label>
+                                            <div className="relative text-white-dark">
+                                                <Field id="password" name="password" type="password" placeholder="Enter Password" className="form-input ps-10 placeholder:text-white-dark" />
+                                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                                    <IconLockDots fill={true} />
+                                                </span>
+                                            </div>
+                                            <span className="text-red-500 mt-1 block text-[12px]">{errors.password && touched.password && errors.password}</span>
+                                        </div>
+                                        <div>
+                                            <label className="flex cursor-pointer items-center">
+                                                <input type="checkbox" className="form-checkbox bg-white dark:bg-black" />
+                                                <span className="text-white-dark">Agree terms & conditions</span>
+                                            </label>
+                                        </div>
+                                        <button disabled={isSubmitting} type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                                            {isSubmitting ? 'LOADING...' : 'Sign Up'}
+                                        </button>
+                                    </Form>
+                                )}
+                            </Formik>
                             <div className="relative my-7 text-center md:mb-9">
                                 <span className="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
                                 <span className="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>

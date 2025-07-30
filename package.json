@@ -28,8 +28,9 @@
         "@types/react-text-mask": "^5.4.11",
         "@x1mrdonut1x/nouislider-react": "^3.4.3",
         "apexcharts": "^3.54.0",
+        "axios": "^1.11.0",
         "easymde": "^2.18.0",
-        "formik": "^2.2.9",
+        "formik": "^2.4.6",
         "highlight.js": "^11.6.0",
         "mantine-datatable": "^1.7.17",
         "nouislider-react": "^3.4.1",
@@ -56,7 +57,7 @@
         "sweetalert2-react-content": "^5.0.7",
         "swiper": "^11.1.9",
         "web-vitals": "^4.2.3",
-        "yup": "^1.4.0"
+        "yup": "^1.6.1"
     },
     "devDependencies": {
         "@headlessui/react": "^2.1.9",
@@ -79,6 +80,7 @@
         "react-animate-height": "^3.0.4",
         "react-i18next": "^15.0.1",
         "react-perfect-scrollbar": "^1.5.8",
+        "sass-embedded": "^1.89.2",
         "tailwindcss": "^3.4.1",
         "typescript": "^5.5.4",
         "vite": "^5.4.1"

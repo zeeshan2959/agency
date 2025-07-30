@@ -1,5 +1,5 @@
 const ENDPOINTS = {
-  LOGIN: '',
+  LOGIN: 'login',
   REGISTER: 'register',
 };
 

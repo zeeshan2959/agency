@@ -12,7 +12,7 @@ import IconTwitter from '../../components/Icon/IconTwitter';
 import IconGoogle from '../../components/Icon/IconGoogle';
 import * as Yup from 'yup';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
-import signUpUser from '../../api/services/auth/auth';
+import {signUpUser} from '../../api/services/auth/auth';
 import { Toast } from '../../components/common/Toast';
 import { AxiosError } from 'axios';
 

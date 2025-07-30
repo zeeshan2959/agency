@@ -6,9 +6,15 @@ export interface Values {
     email: string;
     password: string;
 }
+export interface LoginValues {
+    email: string;
+    password: string;
+}
 
-const signUpUser = async (values:Values) => {
+export const signUpUser = async (values:Values) => {
     return await api.post(ENDPOINTS.REGISTER, values);
 };
+export const signInUser = async (values:LoginValues) => {
+    return await api.post(ENDPOINTS.LOGIN, values);
+};
 
-export default signUpUser

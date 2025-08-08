@@ -100,6 +100,10 @@ const MarkDownEditor = lazy(() => import('../pages/Forms/MarkDownEditor'));
 const DateRangePicker = lazy(() => import('../pages/Forms/DateRangePicker'));
 const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
 
+// New Routes by zeeshan
+const AddBrand = lazy(() => import('../pages/Inventory/AddBrand'));
+const AddCategory = lazy(() => import('../pages/Inventory/AddCategory'));
+
 const routes = [
     // dashboard
     {
@@ -541,6 +545,18 @@ const routes = [
         path: '*',
         element: <Error />,
         layout: 'blank',
+    },
+
+    // New Pages by Zeeshan
+
+    // Inventory
+    {
+        path: '/inventory/brands',
+        element: <AddBrand />,
+    },
+    {
+        path: '/inventory/category',
+        element: <AddCategory />,
     },
 ];
 

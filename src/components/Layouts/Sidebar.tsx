@@ -31,6 +31,7 @@ import IconMenuUsers from '../Icon/Menu/IconMenuUsers';
 import IconMenuPages from '../Icon/Menu/IconMenuPages';
 import IconMenuAuthentication from '../Icon/Menu/IconMenuAuthentication';
 import IconMenuDocumentation from '../Icon/Menu/IconMenuDocumentation';
+import IconMenuBrand from '../Icon/Menu/IconMenuBrand';
 
 const Sidebar = () => {
     const [currentMenu, setCurrentMenu] = useState<string>('');
@@ -126,8 +127,34 @@ const Sidebar = () => {
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
                                 <span>{t('inventory')}</span>
                             </h2>
+                            {/* Brands */}
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'brands' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('brands')}>
+                                    <div className="flex items-center">
+                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Brands')}</span>
+                                    </div>
 
-                            <li className="nav-item">
+                                    <div className={currentMenu !== 'brands' ? 'rtl:rotate-90 -rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'brands' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <NavLink to="/brands">{t('Brands')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/brands/create">{t('Add brand')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/brands/deleted">{t('Deleted brands')}</NavLink>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
+                            {/* <li className="nav-item">
                                 <ul>
                                     <li className="nav-item">
                                         <NavLink to="/inventory/brands" className="group">
@@ -146,7 +173,7 @@ const Sidebar = () => {
                                         </NavLink>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> */}
                             {/* Apps  */}
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
@@ -672,10 +699,10 @@ const Sidebar = () => {
                                 <AnimateHeight duration={300} height={currentMenu === 'auth' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <NavLink to="/auth/boxed-signin">{t('login_boxed')}</NavLink>
+                                            <NavLink to="/login">{t('login')}</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to="/auth/boxed-signup">{t('register_boxed')}</NavLink>
+                                            <NavLink to="/register">{t('register')}</NavLink>
                                         </li>
                                     </ul>
                                 </AnimateHeight>

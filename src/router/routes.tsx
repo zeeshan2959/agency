@@ -101,6 +101,7 @@ const DateRangePicker = lazy(() => import('../pages/Forms/DateRangePicker'));
 const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
 
 // New Routes by zeeshan
+const Brands = lazy(() => import('../pages/Inventory/Brands'));
 const AddBrand = lazy(() => import('../pages/Inventory/AddBrand'));
 const AddCategory = lazy(() => import('../pages/Inventory/AddCategory'));
 
@@ -436,12 +437,12 @@ const routes = [
     },
     //Authentication
     {
-        path: '/auth/boxed-signin',
+        path: '/login',
         element: <LoginBoxed />,
         layout: 'blank',
     },
     {
-        path: '/auth/boxed-signup',
+        path: '/register',
         element: <RegisterBoxed />,
         layout: 'blank',
     },
@@ -551,7 +552,11 @@ const routes = [
 
     // Inventory
     {
-        path: '/inventory/brands',
+        path: '/brands',
+        element: <Brands />,
+    },
+    {
+        path: '/brands/create',
         element: <AddBrand />,
     },
     {

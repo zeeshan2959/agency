@@ -5,11 +5,12 @@ type ButtonProps = {
     text: string;
     classes?: string;
     handleClick?: () => void;
+    disabled?: boolean;
 };
 
-export const Button = ({ type = 'submit', text, classes = 'btn btn-primary', handleClick }: ButtonProps) => {
+export const Button = ({ type = 'submit', text, classes = 'btn btn-primary', handleClick, disabled }: ButtonProps) => {
     return (
-        <button type={type} className={classes}>
+        <button type={type} className={classes} disabled={disabled}>
             {text}
         </button>
     );

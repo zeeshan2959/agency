@@ -1,4 +1,4 @@
-import api from '../../axios';
+import api, { getCsrfCookie } from '../../axios';
 import ENDPOINTS from '../../endpoints';
 
 export interface Values {
@@ -12,9 +12,11 @@ export interface LoginValues {
 }
 
 export const signUpUser = async (values:Values) => {
+    await getCsrfCookie();
     return await api.post(ENDPOINTS.REGISTER, values);
 };
 export const signInUser = async (values:LoginValues) => {
+    await getCsrfCookie();
     return await api.post(ENDPOINTS.LOGIN, values);
 };
 

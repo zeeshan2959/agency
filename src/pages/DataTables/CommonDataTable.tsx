@@ -1,19 +1,27 @@
-import { DataTable, DataTableSortStatus } from 'mantine-datatable';
-import { useEffect, useState } from 'react';
-import sortBy from 'lodash/sortBy';
+import { DataTable } from 'mantine-datatable';
 
 interface CommonDataTableProps<T> {
   title?: string;
   data: T[];
   columns: any[];
   searchFields?: (keyof T)[];
-  defaultPageSize?: number;
-  pageSizes?: number[];
   isLoading?: boolean;
 
-  // ✅ Add these two
+  // ✅ Selection
   selectedRecords?: T[];
   onSelectedRecordsChange?: (records: T[]) => void;
+
+  // ✅ Server-side pagination
+  pagination?: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
+  onPageChange?: (page: number, perPage: number) => void;
+
+  // ✅ Search (server-side)
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
 }
 
 function CommonDataTable<T extends Record<string, any>>({
@@ -21,55 +29,14 @@ function CommonDataTable<T extends Record<string, any>>({
   data,
   columns,
   searchFields = [],
-  defaultPageSize = 10,
-  pageSizes = [10, 20, 30, 50, 100],
   isLoading = false,
   selectedRecords = [],
   onSelectedRecordsChange,
+  pagination,
+  onPageChange,
+  searchQuery = '',
+  onSearchChange,
 }: CommonDataTableProps<T>) {
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(defaultPageSize);
-  const [initialRecords, setInitialRecords] = useState(sortBy(data, 'id'));
-  const [recordsData, setRecordsData] = useState(initialRecords);
-  const [search, setSearch] = useState('');
-  const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-    columnAccessor: 'id',
-    direction: 'asc',
-  });
-
-  // Reset page on page size change
-  useEffect(() => {
-    setPage(1);
-  }, [pageSize]);
-
-  // Paginate records
-  useEffect(() => {
-    const from = (page - 1) * pageSize;
-    const to = from + pageSize;
-    setRecordsData([...initialRecords.slice(from, to)]);
-  }, [page, pageSize, initialRecords]);
-
-  // Search logic
-  useEffect(() => {
-    if (searchFields.length === 0) {
-      setInitialRecords(sortBy(data, 'id'));
-      return;
-    }
-    setInitialRecords(() =>
-      data.filter((item) =>
-        searchFields.some((field) =>
-          item[field]?.toString().toLowerCase().includes(search.toLowerCase())
-        )
-      )
-    );
-  }, [search, data, searchFields]);
-
-  // Sorting
-  useEffect(() => {
-    const sorted = sortBy(initialRecords, sortStatus.columnAccessor);
-    setInitialRecords(sortStatus.direction === 'desc' ? sorted.reverse() : sorted);
-  }, [sortStatus]);
-
   return (
     <div className="panel mt-6">
       <div className="flex md:items-center md:flex-row flex-col mb-5 gap-5">
@@ -80,31 +47,36 @@ function CommonDataTable<T extends Record<string, any>>({
               type="text"
               className="form-input w-auto"
               placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => onSearchChange?.(e.target.value)}
             />
           )}
         </div>
       </div>
+
       <div className="datatables">
         <DataTable
           className="whitespace-nowrap table-hover"
-          records={recordsData}
+          records={data}
           columns={columns}
           highlightOnHover
-          totalRecords={initialRecords.length}
-          recordsPerPage={pageSize}
-          page={page}
-          onPageChange={setPage}
-          recordsPerPageOptions={pageSizes}
-          onRecordsPerPageChange={setPageSize}
-          sortStatus={sortStatus}
-          onSortStatusChange={setSortStatus}
-          // ✅ Mantine built-in selection
-          selectedRecords={selectedRecords}
-          onSelectedRecordsChange={onSelectedRecordsChange}
           minHeight={200}
           fetching={isLoading}
+          // ✅ Server-side pagination
+          totalRecords={pagination?.total || 0}
+          recordsPerPage={pagination?.perPage || 10}
+          page={pagination?.page || 1}
+          onPageChange={(page) => onPageChange?.(page, pagination?.perPage || 10)}
+
+          // ✅ Per-page dropdown
+          recordsPerPageOptions={[10, 20, 30, 50, 100]}
+          onRecordsPerPageChange={(perPage) => onPageChange?.(1, perPage)}
+
+          // ✅ Selection
+          selectedRecords={selectedRecords}
+          onSelectedRecordsChange={onSelectedRecordsChange}
+
+          // ✅ Pagination text
           paginationText={({ from, to, totalRecords }) =>
             `Showing ${from} to ${to} of ${totalRecords} entries`
           }

@@ -32,13 +32,24 @@ const DeletedBrands = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [selectedRows, setSelectedRows] = useState<Brand[]>([]);
-
-    const handleGetBrands = async () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [pagination, setPagination] = useState({
+        page: 1,
+        perPage: 10,
+        total: 0,
+    });
+    // Fetch deleted brands with pagination
+    const handleGetBrands = async (page = 1, perPage = 10, search = '') => {
         setIsLoading(true);
         try {
-            const res = await getDeletedBrands();
+            const res = await getDeletedBrands(page, perPage, search);
             if (res.status === 200) {
                 setData(res.data.data.data || []);
+                setPagination({
+                    total: res.data.data.total,
+                    perPage: perPage,
+                    page: res.data.data.current_page,
+                });
                 setIsLoading(false);
             }
         } catch (err) {
@@ -61,7 +72,7 @@ const DeletedBrands = () => {
             setIsLoading(false);
         }
     };
-
+    // delete brand permanently
     const handleDelete = async (id: number) => {
         setIsLoading(true);
 
@@ -88,6 +99,7 @@ const DeletedBrands = () => {
             setIsLoading(false);
         }
     };
+    // restore brand
     const handleRestore = async (id: number) => {
         setIsLoading(true);
 
@@ -114,6 +126,7 @@ const DeletedBrands = () => {
             setIsLoading(false);
         }
     };
+    // restore multiple brands
     const handleRestoreSelected = async () => {
         const selectedIds = selectedRows.map((row) => row.id);
 
@@ -176,7 +189,11 @@ const DeletedBrands = () => {
                 title="Deleted Brands"
                 data={data}
                 columns={[
-                    { accessor: 'id', sortable: true },
+                    {
+                        accessor: 'index',
+                        title: '#',
+                        render: (_row: any, index: number) => <span>{(pagination?.page - 1) * pagination?.perPage + index + 1}</span>,
+                    },
                     {
                         accessor: 'logo',
                         sortable: false,
@@ -224,6 +241,16 @@ const DeletedBrands = () => {
                 searchFields={['id', 'name', 'description']}
                 selectedRecords={selectedRows}
                 onSelectedRecordsChange={setSelectedRows}
+                pagination={pagination}
+                onPageChange={(page, perPage) => {
+                    setPagination((prev) => ({ ...prev, page, perPage }));
+                    handleGetBrands(page, perPage);
+                }}
+                searchQuery={searchQuery}
+                onSearchChange={(val) => {
+                    setSearchQuery(val);
+                    handleGetBrands(1, pagination.perPage, val);
+                }}
             />
         </div>
     );

@@ -8,7 +8,7 @@ import 'tippy.js/dist/tippy.css';
 import IconPencil from '../../components/Icon/IconPencil';
 import IconTrashLines from '../../components/Icon/IconTrashLines';
 import { Switch } from '../../components/common/Switch';
-import { changeStatus, deleteBrands, deleteMultipleBrands, getBrands, getBrandsById } from '../../api/services/brands/brands';
+import { changeStatus, deleteBrands, deleteMultipleBrands, getBrands } from '../../api/services/brands/brands';
 import { Toast } from '../../components/common/Toast';
 import { AxiosError } from 'axios';
 import { FaPlus } from 'react-icons/fa';
@@ -22,7 +22,6 @@ type Brand = {
     name?: string;
     description?: string;
     status?: string;
-    isLoading?: boolean;
 };
 
 const Brands = () => {
@@ -30,21 +29,31 @@ const Brands = () => {
     const [data, setData] = useState<Brand[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedRows, setSelectedRows] = useState<Brand[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [pagination, setPagination] = useState({
+        page: 1,
+        perPage: 10,
+        total: 0,
+    });
     const navigate = useNavigate();
 
-    const handleGetBrands = async () => {
+    // Fetch brands with pagination
+    const handleGetBrands = async (page = 1, perPage = 10, search = '') => {
         setIsLoading(true);
         try {
-            const res = await getBrands();
+            const res = await getBrands(page, perPage, search);
             if (res.status === 200) {
                 setData(res.data.data.data || []);
+                setPagination({
+                    total: res.data.data.total,
+                    perPage: perPage,
+                    page: res.data.data.current_page,
+                });
             }
-            console.log(res);
         } catch (err) {
             const axiosError = err as AxiosError<any>;
             if (axiosError.response) {
-                const data = axiosError.response.data;
-                Toast('danger', data.message || 'Something went wrong!');
+                Toast('danger', axiosError.response.data?.message || 'Something went wrong!');
             } else if (axiosError.request) {
                 Toast('danger', 'No response from server. Please try again.');
             } else {
@@ -55,6 +64,7 @@ const Brands = () => {
         }
     };
 
+    // Delete brand
     const handleDelete = async (id: number) => {
         setIsLoading(true);
         try {
@@ -71,13 +81,13 @@ const Brands = () => {
         }
     };
 
+    // Bulk delete
     const handleDeleteSelected = async () => {
         const selectedIds = selectedRows.map((row) => row.id);
-
         deleteMessage(async () => {
             setIsLoading(true);
             try {
-                await deleteMultipleBrands(selectedIds as unknown as number);
+                await deleteMultipleBrands(selectedIds);
                 setData((prev) => prev.filter((item) => !selectedRows.some((s) => s.id === item.id)));
                 setSelectedRows([]);
                 Toast('success', 'Selected brands deleted successfully');
@@ -90,14 +100,15 @@ const Brands = () => {
         });
     };
 
+    // Edit
     const handleUpdate = (id: number) => {
         localStorage.setItem('selectedBrand', id.toString());
         navigate('/brands/edit');
     };
 
     useEffect(() => {
-        handleGetBrands();
-        dispatch(setPageTitle('AddBrand'));
+        handleGetBrands(pagination.page, pagination.perPage);
+        dispatch(setPageTitle('Brands'));
     }, []);
 
     return (
@@ -130,7 +141,7 @@ const Brands = () => {
                     {
                         accessor: 'index',
                         title: '#',
-                        render: (_row: any, index: number) => <span>{index + 1}</span>,
+                        render: (_row: any, index: number) => <span>{(pagination?.page - 1) * pagination?.perPage + index + 1}</span>,
                     },
                     {
                         accessor: 'logo',
@@ -143,13 +154,14 @@ const Brands = () => {
                     {
                         accessor: 'description',
                         sortable: true,
-                        render: (row: any) => (
-                            row.description ?
-                            <Tippy content={row.description}>
-                                <p className="truncate w-48">{capitalize(row.description)}</p>
-                            </Tippy>
-                            : <span>---</span>
-                        ),
+                        render: (row: any) =>
+                            row.description ? (
+                                <Tippy content={row.description}>
+                                    <p className="truncate w-48">{capitalize(row.description)}</p>
+                                </Tippy>
+                            ) : (
+                                <span>---</span>
+                            ),
                     },
                     {
                         accessor: 'status',
@@ -200,6 +212,16 @@ const Brands = () => {
                 searchFields={['id', 'name', 'description']}
                 selectedRecords={selectedRows}
                 onSelectedRecordsChange={setSelectedRows}
+                pagination={pagination}
+                onPageChange={(page, perPage) => {
+                    setPagination((prev) => ({ ...prev, page, perPage }));
+                    handleGetBrands(page, perPage);
+                }}
+                searchQuery={searchQuery}
+                onSearchChange={(val) => {
+                    setSearchQuery(val);
+                    handleGetBrands(1, pagination.perPage, val);
+                }}
             />
         </div>
     );

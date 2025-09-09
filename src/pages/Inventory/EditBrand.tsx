@@ -11,6 +11,7 @@ import { ImageType } from 'react-images-uploading';
 import api from '../../api/axios';
 import ENDPOINTS from '../../api/endpoints';
 import { Toast } from '../../components/common/Toast';
+import { Loader } from '../../components/common/Loader';
 
 interface Values {
     logo: File | null;
@@ -23,22 +24,25 @@ const EditBrand = () => {
     const [images, setImages] = useState<ImageType[]>([]);
     const navigate = useNavigate();
     const [brand, setBrand] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleFetchBrandById = async (id: number) => {
+    const handleFetchBrandById = async (id: number | null) => {
+        setIsLoading(true);
         try {
             const res = await api.get(`${ENDPOINTS.BRANDS}/${id}`);
             if (res.status === 200) {
                 setBrand(res.data.data);
-                setImages(brand?.logo ? [{ data_url: `${import.meta.env.VITE_ASSET}${brand?.logo}` }] : []);
+                setImages([
+                    {
+                        dataURL: `${import.meta.env.VITE_ASSET}${res?.data?.data?.logo}`,
+                    } as ImageType,
+                ]);
+                setIsLoading(false);
             }
         } catch (err: any) {
             if (err.response) {
                 const data = err.response.data;
-                if (data.errors) {
-                    Toast('danger', data.message || 'Something went wrong!');
-                } else {
-                    Toast('danger', data.message || 'Something went wrong!');
-                }
+                Toast('danger', data.message || 'Something went wrong!');
             } else if (err.request) {
                 Toast('danger', 'No response from server. Please try again.');
             } else {
@@ -51,13 +55,14 @@ const EditBrand = () => {
         const stored = localStorage.getItem('selectedBrand');
         if (stored) {
             setBrand(JSON.parse(stored));
+            handleFetchBrandById(stored ? JSON.parse(stored) : null);
         }
-        handleFetchBrandById(stored ? JSON.parse(stored) : null);
     }, []);
 
     useEffect(() => {
-        dispatch(setPageTitle('edit'));
-    });
+        dispatch(setPageTitle('Edit Brand'));
+    }, [dispatch]);
+
     const submitForm = async (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
         const formData = new FormData();
         formData.append('name', values.name);
@@ -66,16 +71,17 @@ const EditBrand = () => {
         if (images.length > 0 && images[0].file) {
             formData.append('logo', images[0].file);
         }
+
         try {
             const res = await api.post(`${ENDPOINTS.BRANDS}/${brand?.id}/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            Toast('success', res.data.message || 'Brand created successfully!');
+            Toast('success', res.data.message || 'Brand updated successfully!');
             navigate('/brands');
         } catch (err: any) {
-            setErrors(err.response.data.errors);
+            setErrors(err.response?.data?.errors || {});
         } finally {
             setSubmitting(false);
         }
@@ -94,7 +100,7 @@ const EditBrand = () => {
                     </Link>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>edit</span>
+                    <span>Edit</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <span>{brand?.name}</span>
@@ -102,27 +108,27 @@ const EditBrand = () => {
             </ul>
 
             <div className="pt-5 space-y-8">
-                <div className="">
-                    <div className="panel">
+                <div className="panel">
+                    {isLoading ? (
+                        <div className='flex flex-col items-center'>
+                            <Loader classes="border-blue-600 mb-4" />
+                            <span>Loading..</span>
+                        </div>
+                    ) : (
                         <div className="mb-5">
                             <Formik<Values>
-                                initialValues={
-                                    {
-                                        logo: null,
-                                        name: brand ? brand.name : '',
-                                        description: brand ? brand.description : '',
-                                    } as Values
-                                }
+                                initialValues={{
+                                    logo: null,
+                                    name: brand ? brand.name : '',
+                                    description: brand ? brand.description : '',
+                                }}
                                 enableReinitialize={true}
                                 validationSchema={SubmittedForm}
                                 onSubmit={submitForm}
                             >
-                                {({ errors, submitCount, touched, values, isSubmitting }) => (
+                                {({ errors, touched, isSubmitting }) => (
                                     <Form className="flex flex-col sm:flex-row space-y-10 sm:space-y-0 sm:space-x-10">
                                         <div className="flex flex-col relative">
-                                            <label htmlFor="">Old Logo</label>
-                                            <img src={`${import.meta.env.VITE_ASSET}${brand?.logo}`} alt="old logo" className='h-32 w-32'/>
-
                                             <FileUploader classes="" images={images} setImages={setImages} />
                                             {errors.logo && <div className="text-red-500 text-sm mt-1">{`${errors.logo} (jpg, jpeg, png)`}</div>}
                                         </div>
@@ -135,7 +141,7 @@ const EditBrand = () => {
                                 )}
                             </Formik>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>

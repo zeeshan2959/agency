@@ -16,7 +16,7 @@ const FileUploader = ({ classes, images, setImages }: Props) => {
         dispatch(setPageTitle('File Upload Preview'));
     }, [dispatch]);
 
-    const maxNumber = 5; // Adjust max files
+    const maxNumber = 5;
 
     const onChange = (imageList: ImageListType) => {
         setImages(imageList);

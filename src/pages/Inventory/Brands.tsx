@@ -54,21 +54,6 @@ const Brands = () => {
         }
     };
 
-    const handleGetBrandsById = async (id: any) => {
-        setIsLoading(true);
-        try {
-            const res = await getBrandsById(id);
-            if (res.status === 200) {
-                console.log(res.data.data.data || []);
-            }
-        } catch (err) {
-            const axiosError = err as AxiosError<any>;
-            Toast('danger', axiosError.response?.data?.message || axiosError.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleDelete = async (id: number) => {
         setIsLoading(true);
         try {
@@ -84,8 +69,6 @@ const Brands = () => {
             setIsLoading(false);
         }
     };
-
-    console.log(selectedRows);
 
     const handleDeleteSelected = async () => {
         const selectedIds = selectedRows.map((row) => row.id);
@@ -108,7 +91,6 @@ const Brands = () => {
 
     const handleUpdate = (id: number) => {
         localStorage.setItem('selectedBrand', id.toString());
-        handleGetBrandsById(id);
         navigate('/brands/edit');
     };
 

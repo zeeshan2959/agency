@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+import EditBrand from '../pages/Inventory/EditBrand';
+import DeletedBrands from '../pages/Inventory/DeletedBrands';
 const Index = lazy(() => import('../pages/Index'));
 const Analytics = lazy(() => import('../pages/Analytics'));
 const Finance = lazy(() => import('../pages/Finance'));
@@ -558,6 +560,14 @@ const routes = [
     {
         path: '/brands/create',
         element: <AddBrand />,
+    },
+    {
+        path: '/brands/edit',
+        element: <EditBrand />,
+    },
+    {
+        path: '/brands/deleted',
+        element: <DeletedBrands />,
     },
     {
         path: '/inventory/category',

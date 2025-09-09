@@ -18,13 +18,45 @@ interface Values {
     description: string;
 }
 
-const AddBrand = () => {
+const EditBrand = () => {
     const dispatch = useDispatch();
     const [images, setImages] = useState<ImageType[]>([]);
     const navigate = useNavigate();
+    const [brand, setBrand] = useState<any>(null);
+
+    const handleFetchBrandById = async (id: number) => {
+        try {
+            const res = await api.get(`${ENDPOINTS.BRANDS}/${id}`);
+            if (res.status === 200) {
+                setBrand(res.data.data);
+                setImages(brand?.logo ? [{ data_url: `${import.meta.env.VITE_ASSET}${brand?.logo}` }] : []);
+            }
+        } catch (err: any) {
+            if (err.response) {
+                const data = err.response.data;
+                if (data.errors) {
+                    Toast('danger', data.message || 'Something went wrong!');
+                } else {
+                    Toast('danger', data.message || 'Something went wrong!');
+                }
+            } else if (err.request) {
+                Toast('danger', 'No response from server. Please try again.');
+            } else {
+                Toast('danger', err.message || 'Unexpected error occurred.');
+            }
+        }
+    };
 
     useEffect(() => {
-        dispatch(setPageTitle('AddBrand'));
+        const stored = localStorage.getItem('selectedBrand');
+        if (stored) {
+            setBrand(JSON.parse(stored));
+        }
+        handleFetchBrandById(stored ? JSON.parse(stored) : null);
+    }, []);
+
+    useEffect(() => {
+        dispatch(setPageTitle('edit'));
     });
     const submitForm = async (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
         const formData = new FormData();
@@ -35,7 +67,7 @@ const AddBrand = () => {
             formData.append('logo', images[0].file);
         }
         try {
-            const res = await api.post(ENDPOINTS.BRANDS, formData, {
+            const res = await api.post(`${ENDPOINTS.BRANDS}/${brand?.id}/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -62,7 +94,10 @@ const AddBrand = () => {
                     </Link>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>Add brand</span>
+                    <span>edit</span>
+                </li>
+                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                    <span>{brand?.name}</span>
                 </li>
             </ul>
 
@@ -74,23 +109,27 @@ const AddBrand = () => {
                                 initialValues={
                                     {
                                         logo: null,
-                                        name: '',
-                                        description: '',
+                                        name: brand ? brand.name : '',
+                                        description: brand ? brand.description : '',
                                     } as Values
                                 }
+                                enableReinitialize={true}
                                 validationSchema={SubmittedForm}
                                 onSubmit={submitForm}
                             >
                                 {({ errors, submitCount, touched, values, isSubmitting }) => (
                                     <Form className="flex flex-col sm:flex-row space-y-10 sm:space-y-0 sm:space-x-10">
-                                        <div className='flex flex-col'>
+                                        <div className="flex flex-col relative">
+                                            <label htmlFor="">Old Logo</label>
+                                            <img src={`${import.meta.env.VITE_ASSET}${brand?.logo}`} alt="old logo" className='h-32 w-32'/>
+
                                             <FileUploader classes="" images={images} setImages={setImages} />
                                             {errors.logo && <div className="text-red-500 text-sm mt-1">{`${errors.logo} (jpg, jpeg, png)`}</div>}
                                         </div>
                                         <div className="flex-1 flex flex-col space-y-5">
                                             <Input id="name" name="name" label="Name" type="text" errors={errors} touched={touched} />
                                             <Input id="description" name="description" label="Description" type="text" as="textarea" />
-                                            <Button text={isSubmitting ? 'Submitting...' : 'Add Brand'} disabled={isSubmitting} />
+                                            <Button text={isSubmitting ? 'Submitting...' : 'Update Brand'} disabled={isSubmitting} />
                                         </div>
                                     </Form>
                                 )}
@@ -103,4 +142,4 @@ const AddBrand = () => {
     );
 };
 
-export default AddBrand;
+export default EditBrand;

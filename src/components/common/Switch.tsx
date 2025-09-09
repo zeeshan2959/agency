@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 
 interface SwitchProps {
-  status: string; // "active" or "inactive"
+  id: number;
+  status: string;
+  changeStatus?: (id: number, status: string) => void;
 }
 
-export const Switch: React.FC<SwitchProps> = ({ status }) => {
+export const Switch: React.FC<SwitchProps> = ({ id, status, changeStatus }) => {
   const [isOn, setIsOn] = useState(status === "active");
 
-  // Keep in sync if the status prop changes
   useEffect(() => {
     setIsOn(status === "active");
   }, [status]);
+
+  const handleToggle = () => {
+    const newStatus = isOn ? "inactive" : "active";
+    setIsOn(!isOn);
+    if (changeStatus) {
+      changeStatus(id, newStatus);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center font-poppins">
@@ -19,9 +28,8 @@ export const Switch: React.FC<SwitchProps> = ({ status }) => {
           className={`relative w-[90px] h-[30px] rounded-full shadow-inner cursor-pointer transition-all duration-300 ${
             isOn ? "bg-gray-200" : "bg-gray-100"
           }`}
-          onClick={() => setIsOn(!isOn)}
+          onClick={handleToggle}
         >
-          {/* Text label */}
           <span
             className={`absolute top-1/2 transform -translate-y-1/2 text-[12px] capitalize transition-all duration-500 ${
               isOn
@@ -32,7 +40,6 @@ export const Switch: React.FC<SwitchProps> = ({ status }) => {
             {isOn ? "Active" : "Inactive"}
           </span>
 
-          {/* Knob */}
           <div
             className={`absolute top-1/2 transform -translate-y-1/2 w-[27px] h-[24px] rounded-full shadow transition-transform duration-700 ${
               isOn

@@ -9,7 +9,11 @@ interface CommonDataTableProps<T> {
   searchFields?: (keyof T)[];
   defaultPageSize?: number;
   pageSizes?: number[];
-  isLoading?:boolean;
+  isLoading?: boolean;
+
+  // ✅ Add these two
+  selectedRecords?: T[];
+  onSelectedRecordsChange?: (records: T[]) => void;
 }
 
 function CommonDataTable<T extends Record<string, any>>({
@@ -19,13 +23,14 @@ function CommonDataTable<T extends Record<string, any>>({
   searchFields = [],
   defaultPageSize = 10,
   pageSizes = [10, 20, 30, 50, 100],
-  isLoading= false,
+  isLoading = false,
+  selectedRecords = [],
+  onSelectedRecordsChange,
 }: CommonDataTableProps<T>) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const [initialRecords, setInitialRecords] = useState(sortBy(data, 'id'));
   const [recordsData, setRecordsData] = useState(initialRecords);
-  const [selectedRecords, setSelectedRecords] = useState<T[]>([]);
   const [search, setSearch] = useState('');
   const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
     columnAccessor: 'id',
@@ -95,8 +100,9 @@ function CommonDataTable<T extends Record<string, any>>({
           onRecordsPerPageChange={setPageSize}
           sortStatus={sortStatus}
           onSortStatusChange={setSortStatus}
+          // ✅ Mantine built-in selection
           selectedRecords={selectedRecords}
-          onSelectedRecordsChange={setSelectedRecords}
+          onSelectedRecordsChange={onSelectedRecordsChange}
           minHeight={200}
           fetching={isLoading}
           paginationText={({ from, to, totalRecords }) =>

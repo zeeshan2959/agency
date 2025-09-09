@@ -5,14 +5,15 @@ import { useDispatch } from 'react-redux';
 import CommonDataTable from '../DataTables/CommonDataTable';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import IconPencil from '../../components/Icon/IconPencil';
+import IconSettings from '../../components/Icon/IconSettings';
 import IconTrashLines from '../../components/Icon/IconTrashLines';
 import { Switch } from '../../components/common/Switch';
-import { changeStatus, deleteBrands, deleteMultipleBrands, getBrands, getBrandsById } from '../../api/services/brands/brands';
+import { deleteBrands, deleteBrandsPermanently, getBrandsById, getDeletedBrands, restoreBrands, restoreMultipleBrands } from '../../api/services/brands/brands';
 import { Toast } from '../../components/common/Toast';
 import { AxiosError } from 'axios';
 import { FaPlus } from 'react-icons/fa';
 import { deleteMessage } from '../../components/common/sweetAlerts/deleteMessage';
+import IconRestore from '../../components/Icon/IconRestore';
 import { capitalizeWords } from '../../utils/capitalizeWords';
 import { capitalize } from 'lodash';
 
@@ -25,20 +26,105 @@ type Brand = {
     isLoading?: boolean;
 };
 
-const Brands = () => {
+const DeletedBrands = () => {
     const dispatch = useDispatch();
     const [data, setData] = useState<Brand[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedRows, setSelectedRows] = useState<Brand[]>([]);
     const navigate = useNavigate();
+    const [selectedRows, setSelectedRows] = useState<Brand[]>([]);
 
     const handleGetBrands = async () => {
         setIsLoading(true);
         try {
-            const res = await getBrands();
+            const res = await getDeletedBrands();
             if (res.status === 200) {
                 setData(res.data.data.data || []);
+                setIsLoading(false);
             }
+        } catch (err) {
+            const axiosError = err as AxiosError<any>;
+
+            if (axiosError.response) {
+                const data = axiosError.response.data;
+
+                if (data.errors) {
+                    Toast('danger', data.message || 'Something went wrong!');
+                } else {
+                    Toast('danger', data.message || 'Something went wrong!');
+                }
+            } else if (axiosError.request) {
+                Toast('danger', 'No response from server. Please try again.');
+            } else {
+                Toast('danger', axiosError.message || 'Unexpected error occurred.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        setIsLoading(true);
+
+        try {
+            const res = await deleteBrandsPermanently(id);
+
+            if (res.status === 200) {
+                setData((prev) => prev.filter((item) => item.id !== id));
+
+                Toast('success', res.data.message || 'Brand deleted successfully');
+            }
+        } catch (err) {
+            const axiosError = err as AxiosError<any>;
+
+            if (axiosError.response) {
+                const data = axiosError.response.data;
+                Toast('danger', data.message || 'Something went wrong!');
+            } else if (axiosError.request) {
+                Toast('danger', 'No response from server. Please try again.');
+            } else {
+                Toast('danger', axiosError.message || 'Unexpected error occurred.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const handleRestore = async (id: number) => {
+        setIsLoading(true);
+
+        try {
+            const res = await restoreBrands(id);
+
+            if (res.status === 200) {
+                setData((prev) => prev.filter((item) => item.id !== id));
+
+                Toast('success', res.data.message || 'Brand restore successfully');
+            }
+        } catch (err) {
+            const axiosError = err as AxiosError<any>;
+
+            if (axiosError.response) {
+                const data = axiosError.response.data;
+                Toast('danger', data.message || 'Something went wrong!');
+            } else if (axiosError.request) {
+                Toast('danger', 'No response from server. Please try again.');
+            } else {
+                Toast('danger', axiosError.message || 'Unexpected error occurred.');
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    const handleRestoreSelected = async () => {
+        const selectedIds = selectedRows.map((row) => row.id);
+
+        setIsLoading(true);
+        try {
+            const res = await restoreMultipleBrands(selectedIds as unknown as number);
+            if (res.status === 200) {
+                setData((prev) => prev.filter((item) => !selectedRows.some((s) => s.id === item.id)));
+            }
+            Toast('success', 'Selected brands restored successfully');
+            setSelectedRows([]);
         } catch (err) {
             const axiosError = err as AxiosError<any>;
             if (axiosError.response) {
@@ -54,67 +140,9 @@ const Brands = () => {
         }
     };
 
-    const handleGetBrandsById = async (id: any) => {
-        setIsLoading(true);
-        try {
-            const res = await getBrandsById(id);
-            if (res.status === 200) {
-                console.log(res.data.data.data || []);
-            }
-        } catch (err) {
-            const axiosError = err as AxiosError<any>;
-            Toast('danger', axiosError.response?.data?.message || axiosError.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleDelete = async (id: number) => {
-        setIsLoading(true);
-        try {
-            const res = await deleteBrands(id);
-            if (res.status === 200) {
-                setData((prev) => prev.filter((item) => item.id !== id));
-                Toast('success', res.data.message || 'Brand deleted successfully');
-            }
-        } catch (err) {
-            const axiosError = err as AxiosError<any>;
-            Toast('danger', axiosError.response?.data?.message || axiosError.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    console.log(selectedRows);
-
-    const handleDeleteSelected = async () => {
-        const selectedIds = selectedRows.map((row) => row.id);
-
-        deleteMessage(async () => {
-            setIsLoading(true);
-            try {
-                await deleteMultipleBrands(selectedIds as unknown as number);
-                setData((prev) => prev.filter((item) => !selectedRows.some((s) => s.id === item.id)));
-                setSelectedRows([]);
-                Toast('success', 'Selected brands deleted successfully');
-            } catch (err) {
-                const axiosError = err as AxiosError<any>;
-                Toast('danger', axiosError.response?.data?.message || 'Unexpected error occurred.');
-            } finally {
-                setIsLoading(false);
-            }
-        });
-    };
-
-    const handleUpdate = (id: number) => {
-        localStorage.setItem('selectedBrand', id.toString());
-        handleGetBrandsById(id);
-        navigate('/brands/edit');
-    };
-
     useEffect(() => {
         handleGetBrands();
-        dispatch(setPageTitle('AddBrand'));
+        dispatch(setPageTitle('Deleted Brands'));
     }, []);
 
     return (
@@ -127,21 +155,25 @@ const Brands = () => {
                         </Link>
                     </li>
                     <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                        <span>brands</span>
+                        <Link to="/brands" className="text-primary hover:underline">
+                            brands
+                        </Link>
+                    </li>
+                    <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                        <span>deleted</span>
                     </li>
                 </ul>
                 <div className="flex items-center gap-3">
                     <Link to="/brands/create" className="btn btn-primary flex items-center gap-2">
                         <FaPlus /> New Brand
                     </Link>
-                    <button className="btn btn-danger" onClick={handleDeleteSelected} disabled={selectedRows.length === 0}>
-                        Delete Selected
+                    <button className="btn btn-success" onClick={handleRestoreSelected} disabled={selectedRows.length === 0}>
+                        Restore Selected
                     </button>
                 </div>
             </div>
-
             <CommonDataTable
-                title="All Brands"
+                title="Deleted Brands"
                 data={data}
                 columns={[
                     { accessor: 'id', sortable: true },
@@ -149,7 +181,9 @@ const Brands = () => {
                         accessor: 'logo',
                         sortable: false,
                         render: (row: any) => (
-                            <img src={`${import.meta.env.VITE_ASSET}${row.logo}`} alt="Brand logo" className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300" />
+                            <>
+                                <img src={`${import.meta.env.VITE_ASSET}${row.logo}`} alt={`Brand logo`} className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300" />
+                            </>
                         ),
                     },
                     { accessor: 'name', sortable: true, render: (row: any) => <span>{capitalizeWords(row.name)}</span> },
@@ -163,41 +197,20 @@ const Brands = () => {
                         ),
                     },
                     {
-                        accessor: 'status',
-                        sortable: false,
-                        title: <div className="text-center w-full">Status</div>,
-                        render: (row: any) => (
-                            <Switch
-                                id={row.id}
-                                status={row.status}
-                                changeStatus={async (id, newStatus) => {
-                                    try {
-                                        await changeStatus(id, newStatus);
-                                        Toast('success', `Status updated to ${newStatus}`);
-                                        setData((prev) => prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item)));
-                                    } catch (err) {
-                                        const axiosError = err as AxiosError<any>;
-                                        Toast('danger', axiosError.response?.data?.message || 'Failed to update status');
-                                    }
-                                }}
-                            />
-                        ),
-                    },
-                    {
                         accessor: 'actions',
                         sortable: false,
                         title: <div className="text-center w-full">Actions</div>,
                         render: (row: any) => (
                             <ul className="flex items-center justify-center gap-2">
                                 <li>
-                                    <Tippy content="Edit">
-                                        <button type="button" onClick={() => handleUpdate(row.id)}>
-                                            <IconPencil className="text-success" />
+                                    <Tippy content="Restore">
+                                        <button type="button" onClick={() => handleRestore(row.id)}>
+                                            <IconRestore className="w-5 h-5 text-primary transform scale-x-[-1]" />
                                         </button>
                                     </Tippy>
                                 </li>
                                 <li>
-                                    <Tippy content="Delete">
+                                    <Tippy content="Delete Permanently">
                                         <button type="button" onClick={() => deleteMessage(() => handleDelete(row.id))}>
                                             <IconTrashLines className="text-danger" />
                                         </button>
@@ -216,4 +229,4 @@ const Brands = () => {
     );
 };
 
-export default Brands;
+export default DeletedBrands;

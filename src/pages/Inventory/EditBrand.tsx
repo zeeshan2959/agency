@@ -12,6 +12,7 @@ import api from '../../api/axios';
 import ENDPOINTS from '../../api/endpoints';
 import { Toast } from '../../components/common/Toast';
 import { Loader } from '../../components/common/Loader';
+import { capitalize } from 'lodash';
 
 interface Values {
     logo: File | null;
@@ -103,7 +104,7 @@ const EditBrand = () => {
                     <span>Edit</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>{brand?.name}</span>
+                    <span>{capitalize(brand?.name)}</span>
                 </li>
             </ul>
 

@@ -39,6 +39,7 @@ const Brands = () => {
             if (res.status === 200) {
                 setData(res.data.data.data || []);
             }
+            console.log(res);
         } catch (err) {
             const axiosError = err as AxiosError<any>;
             if (axiosError.response) {
@@ -109,7 +110,7 @@ const Brands = () => {
                         </Link>
                     </li>
                     <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                        <span>brands</span>
+                        <span>Brands</span>
                     </li>
                 </ul>
                 <div className="flex items-center gap-3">
@@ -126,7 +127,11 @@ const Brands = () => {
                 title="All Brands"
                 data={data}
                 columns={[
-                    { accessor: 'id', sortable: true },
+                    {
+                        accessor: 'index',
+                        title: '#',
+                        render: (_row: any, index: number) => <span>{index + 1}</span>,
+                    },
                     {
                         accessor: 'logo',
                         sortable: false,
@@ -139,9 +144,11 @@ const Brands = () => {
                         accessor: 'description',
                         sortable: true,
                         render: (row: any) => (
+                            row.description ?
                             <Tippy content={row.description}>
                                 <p className="truncate w-48">{capitalize(row.description)}</p>
                             </Tippy>
+                            : <span>---</span>
                         ),
                     },
                     {

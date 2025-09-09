@@ -156,11 +156,11 @@ const DeletedBrands = () => {
                     </li>
                     <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                         <Link to="/brands" className="text-primary hover:underline">
-                            brands
+                            Brands
                         </Link>
                     </li>
                     <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                        <span>deleted</span>
+                        <span>Deleted</span>
                     </li>
                 </ul>
                 <div className="flex items-center gap-3">

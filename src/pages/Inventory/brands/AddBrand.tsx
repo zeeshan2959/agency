@@ -2,15 +2,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { setPageTitle } from '../../store/themeConfigSlice';
+import { setPageTitle } from '../../../store/themeConfigSlice';
 import { useDispatch } from 'react-redux';
-import FileUploader from '../../components/common/FileUploader';
-import { Input } from '../../components/common/Input';
-import { Button } from '../../components/common/Button';
+import FileUploader from '../../../components/common/FileUploader';
+import { Input } from '../../../components/common/Input';
+import { Button } from '../../../components/common/Button';
 import { ImageType } from 'react-images-uploading';
-import api from '../../api/axios';
-import ENDPOINTS from '../../api/endpoints';
-import { Toast } from '../../components/common/Toast';
+import api from '../../../api/axios';
+import ENDPOINTS from '../../../api/endpoints';
+import { Toast } from '../../../components/common/Toast';
 
 interface Values {
     logo: File | null;
@@ -24,7 +24,7 @@ const AddBrand = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(setPageTitle('AddBrand'));
+        dispatch(setPageTitle('Add Brand'));
     });
     const submitForm = async (values: Values, { setSubmitting, setErrors }: FormikHelpers<Values>) => {
         const formData = new FormData();

@@ -1,6 +1,4 @@
 import { lazy } from 'react';
-import EditBrand from '../pages/Inventory/EditBrand';
-import DeletedBrands from '../pages/Inventory/DeletedBrands';
 const Index = lazy(() => import('../pages/Index'));
 const Analytics = lazy(() => import('../pages/Analytics'));
 const Finance = lazy(() => import('../pages/Finance'));
@@ -103,9 +101,18 @@ const DateRangePicker = lazy(() => import('../pages/Forms/DateRangePicker'));
 const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
 
 // New Routes by zeeshan
-const Brands = lazy(() => import('../pages/Inventory/Brands'));
-const AddBrand = lazy(() => import('../pages/Inventory/AddBrand'));
-const AddCategory = lazy(() => import('../pages/Inventory/AddCategory'));
+
+// brands
+const Brands = lazy(() => import('../pages/Inventory/brands/Brands'));
+const AddBrand = lazy(() => import('../pages/Inventory/brands/AddBrand'));
+const EditBrand = lazy(() => import('../pages/Inventory/brands/EditBrand'));
+const DeletedBrands = lazy(() => import('../pages/Inventory/brands/DeletedBrands'));
+
+// categories
+const Categories = lazy(() => import('../pages/Inventory/categories/Categories'));
+const AddCategory = lazy(() => import('../pages/Inventory/categories/AddCategory'));
+const DeletedCategories = lazy(() => import('../pages/Inventory/categories/DeletedCategories'));
+const EditCategory = lazy(() => import('../pages/Inventory/categories/EditCategory'));
 
 const routes = [
     // dashboard
@@ -553,6 +560,8 @@ const routes = [
     // New Pages by Zeeshan
 
     // Inventory
+
+    // brands
     {
         path: '/brands',
         element: <Brands />,
@@ -569,9 +578,23 @@ const routes = [
         path: '/brands/deleted',
         element: <DeletedBrands />,
     },
+
+    // categories
     {
-        path: '/inventory/category',
+        path: '/categories',
+        element: <Categories />,
+    },
+    {
+        path: '/categories/create',
         element: <AddCategory />,
+    },
+    {
+        path: '/categories/edit',
+        element: <EditCategory />,
+    },
+    {
+        path: '/categories/deleted',
+        element: <DeletedCategories />,
     },
 ];
 

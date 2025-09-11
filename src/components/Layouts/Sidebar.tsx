@@ -154,6 +154,33 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
+                            {/* categories */}
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'categories' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('categories')}>
+                                    <div className="flex items-center">
+                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Categories')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'categories' ? 'rtl:rotate-90 -rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'categories' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <NavLink to="/categories">{t('categories')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/categories/create">{t('Add Category')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/categories/deleted">{t('Deleted Categories')}</NavLink>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
                             {/* <li className="nav-item">
                                 <ul>
                                     <li className="nav-item">

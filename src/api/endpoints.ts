@@ -8,6 +8,8 @@ const ENDPOINTS = {
 
     //   categories
     CATEGORIES: 'categories',
+    //   products
+    PRODUCTS: 'products',
 };
 
 export default ENDPOINTS;

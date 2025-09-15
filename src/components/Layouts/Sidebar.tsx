@@ -181,6 +181,33 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
+                            {/* products */}
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'products' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('products')}>
+                                    <div className="flex items-center">
+                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Products')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'products' ? 'rtl:rotate-90 -rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'products' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <NavLink to="/products">{t('Products')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/products/create">{t('Add Product')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/products/deleted">{t('Deleted Products')}</NavLink>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
                             {/* <li className="nav-item">
                                 <ul>
                                     <li className="nav-item">

@@ -2,36 +2,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { setPageTitle } from '../../../store/themeConfigSlice';
 import { useDispatch } from 'react-redux';
-import CommonDataTable from '../../DataTables/CommonDataTable';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import IconPencil from '../../../components/Icon/IconPencil';
-import IconTrashLines from '../../../components/Icon/IconTrashLines';
-import { Switch } from '../../../components/common/Switch';
 import { Toast } from '../../../components/common/Toast';
 import { AxiosError } from 'axios';
-import { FaPlus } from 'react-icons/fa';
-import { deleteMessage } from '../../../components/common/sweetAlerts/deleteMessage';
-import { capitalizeWords } from '../../../utils/capitalizeWords';
-import { changeStatus, deleteMultipleProducts, deleteProduct, getProductById, getProducts } from '../../../api/services/products';
-import AvatarGroup from '../../../components/common/AvatarGroup';
-import BatchCard from '../../../components/common/BatchCard';
+import { FaHome, FaPlus } from 'react-icons/fa';
+import { getProductById } from '../../../api/services/products';
 import ProductCard from '../../../components/common/ProductCard';
-import NoDataCard from '../../../components/common/NoDataCard';
 import { Loader } from '../../../components/common/Loader';
+import Tabs from '../../../components/common/Tabs';
+import IconHome from '../../../components/Icon/IconHome';
+import IconUser from '../../../components/Icon/IconUser';
+import BatchCard from '../../../components/pages/products/BatchCard';
+import DeletedBatchCard from '../../../components/pages/products/DeleteBatchCard';
 
 const Batches = () => {
     const dispatch = useDispatch();
-    const [data, setData] = useState([]);
     const [productData, setProductData] = useState({} as any);
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedRows, setSelectedRows] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [pagination, setPagination] = useState({
-        page: 1,
-        perPage: 10,
-        total: 0,
-    });
     const navigate = useNavigate();
     const batchId = localStorage.getItem('selectBatchId');
 
@@ -42,7 +29,6 @@ const Batches = () => {
             const res = await getProductById(batchId);
             if (res.status === 200) {
                 setProductData(res.data.data);
-                setData(res.data.data.batches || []);
             }
         } catch (err) {
             const axiosError = err as AxiosError<any>;
@@ -57,56 +43,26 @@ const Batches = () => {
             setIsLoading(false);
         }
     };
-
-    // Delete Category
-    // const handleDelete = async (id: number) => {
-    //     setIsLoading(true);
-    //     try {
-    //         const res = await deleteProduct(id);
-    //         if (res.status === 200) {
-    //             setData((prev) => prev.filter((item) => item.id !== id));
-    //             Toast('success', res.data.message || 'Product deleted successfully');
-    //         }
-    //     } catch (err) {
-    //         const axiosError = err as AxiosError<any>;
-    //         Toast('danger', axiosError.response?.data?.message || axiosError.message);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };
-
-    // Bulk delete
-    // const handleDeleteSelected = async () => {
-    //     const selectedIds = selectedRows.map((row) => row.id);
-    //     deleteMessage(async () => {
-    //         setIsLoading(true);
-    //         try {
-    //             await deleteMultipleProducts(selectedIds);
-    //             setData((prev) => prev.filter((item) => !selectedRows.some((s) => s.id === item.id)));
-    //             setSelectedRows([]);
-    //             Toast('success', 'Selected products deleted successfully');
-    //         } catch (err) {
-    //             const axiosError = err as AxiosError<any>;
-    //             Toast('danger', axiosError.response?.data?.message || 'Unexpected error occurred.');
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     });
-    // };
-
-    // Edit
-    const handleUpdate = (id: number) => {
-        localStorage.setItem('selectedCategory', id.toString());
-        navigate('/products/edit');
-    };
-
     useEffect(() => {
         dispatch(setPageTitle('Products batches'));
         handleGetProduct();
     }, []);
 
+    const tabItems = [
+        {
+            label: 'Active Batches',
+            icon: <IconHome className="w-5 h-5" />,
+            content: <div>{productData?.id && <BatchCard productId={productData?.id} />}</div>,
+        },
+        {
+            label: 'Deleted Batches',
+            icon: <IconUser className="w-5 h-5" />,
+            content: <div>{productData?.id && <DeletedBatchCard productId={productData?.id} />}</div>,
+        },
+    ];
+
     return (
-        <div>
+        <div className="relative">
             {isLoading ? (
                 <div className="flex flex-col justify-center items-center h-[50vh]">
                     <Loader />
@@ -117,8 +73,8 @@ const Batches = () => {
                     <div className="flex items-center justify-between">
                         <ul className="flex space-x-2 rtl:space-x-reverse">
                             <li>
-                                <Link to="#" className="text-primary hover:underline">
-                                    Inventory
+                                <Link to="/" className="text-primary hover:underline">
+                                    <FaHome className="shrink-0 h-[18px] w-[18px]" />
                                 </Link>
                             </li>
                             <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
@@ -130,16 +86,21 @@ const Batches = () => {
                                 <span>{productData.name}</span>
                             </li>
                         </ul>
-                        <div className="flex items-center gap-3">
-                            <Link to="/products/batch/create" className="btn btn-primary flex items-center gap-2">
-                                <FaPlus /> New Batch
-                            </Link>
-                        </div>
                     </div>
                     <ProductCard product={productData} />
-                    <h2 className="text-lg font-semibold text-slate-800 my-4">Product Batches</h2>
-                    <BatchCard batches={data} />
-                    {data.length === 0 && <NoDataCard buttonText="Add New Batch" buttonLink="/products/batch/create" />}
+                    <div className="flex justify-end relative">
+                        <button
+                            onClick={() => {
+                                navigate('/products/batch/create'), localStorage.setItem('selectProductId', productData.id);
+                            }}
+                            className="btn btn-primary flex items-center gap-2 absolute z-10 top-6 right-0"
+                        >
+                            <FaPlus /> New Batch
+                        </button>
+                    </div>
+                    <div className="flex items-center justify-between mt-4">
+                        <Tabs tabs={tabItems} />
+                    </div>
                 </>
             )}
         </div>

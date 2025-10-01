@@ -1,8 +1,13 @@
 import Tippy from '@tippyjs/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { FaCalendarAlt, FaBoxOpen, FaDollarSign, FaExclamationTriangle, FaLayerGroup, FaClipboardList } from 'react-icons/fa';
 import IconPencil from '../Icon/IconPencil';
 import IconTrashLines from '../Icon/IconTrashLines';
+import { AxiosError } from 'axios';
+import { Toast } from './Toast';
+import { deleteMessage } from './sweetAlerts/deleteMessage';
+import { deleteBatch } from '../../api/services/products';
+import { useNavigate } from 'react-router-dom';
 
 type Batch = {
     id: string | number;
@@ -21,9 +26,33 @@ type Batch = {
 
 interface BatchCardProps {
     batches: Batch[];
+    deleted?: boolean;
+    setData: React.Dispatch<React.SetStateAction<Batch[]>>;
 }
 
-const BatchCard: React.FC<BatchCardProps> = ({ batches }) => {
+const BatchCard: React.FC<BatchCardProps> = ({ batches, setData, deleted }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const handleDelete = async (id: number) => {
+        setIsLoading(true);
+        try {
+            const res = await deleteBatch(id);
+            if (res.status === 200) {
+                setData((prev) => prev.filter((item) => item.id !== id));
+                Toast('success', res.data.message || 'Batch deleted successfully');
+            }
+        } catch (err) {
+            const axiosError = err as AxiosError<any>;
+            Toast('danger', axiosError.response?.data?.message || axiosError.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleUpdate = (id: string | number) => {
+        localStorage.setItem('batchId', id.toString());
+        navigate('/products/batch/edit');
+    };
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-4">
             {batches.map((batch) => (
@@ -34,8 +63,9 @@ const BatchCard: React.FC<BatchCardProps> = ({ batches }) => {
                         <ul className="flex items-center justify-center gap-2">
                             <li>
                                 <Tippy content="Edit">
-                                    <button type="button"
-                                    // onClick={() => handleUpdate(row.id)}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleUpdate(batch.id)}
                                     >
                                         <IconPencil className="text-success" />
                                     </button>
@@ -43,9 +73,7 @@ const BatchCard: React.FC<BatchCardProps> = ({ batches }) => {
                             </li>
                             <li>
                                 <Tippy content="Delete">
-                                    <button type="button"
-                                    // onClick={() => deleteMessage(() => handleDelete(row.id))}
-                                    >
+                                    <button type="button" onClick={() => deleteMessage(() => handleDelete(Number(batch?.id)))}>
                                         <IconTrashLines className="text-danger" />
                                     </button>
                                 </Tippy>

@@ -51,7 +51,7 @@ const MultipleFileUploader = ({ images, setImages }: MultipleFileUploaderProps) 
                     <ImageUploading multiple value={images} onChange={onChange} maxNumber={maxNumber}>
                         {({ imageList, onImageUpload, onImageRemoveAll, onImageUpdate, onImageRemove, isDragging, dragProps }) => (
                             <div className="upload__image-wrapper">
-                                <button className="custom-file-container__custom-file__custom-file-control" onClick={onImageUpload}>
+                                <button type='button' className="custom-file-container__custom-file__custom-file-control" onClick={onImageUpload}>
                                     Choose File...
                                 </button>
                                 &nbsp;

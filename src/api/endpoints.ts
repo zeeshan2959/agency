@@ -10,6 +10,7 @@ const ENDPOINTS = {
     CATEGORIES: 'categories',
     //   products
     PRODUCTS: 'products',
+    PRODUCT_BATCHES: 'product-batches',
 };
 
 export default ENDPOINTS;

@@ -117,8 +117,11 @@ const EditCategory = lazy(() => import('../pages/Inventory/categories/EditCatego
 // products
 const Products = lazy(() => import('../pages/Inventory/products/Products'));
 const AddProduct = lazy(() => import('../pages/Inventory/products/AddProduct'));
+const UpdateProduct = lazy(() => import('../pages/Inventory/products/UpdateProduct'));
 const DeletedProducts = lazy(() => import('../pages/Inventory/products/DeletedProducts'));
 const Batches = lazy(() => import('../pages/Inventory/products/Batches'));
+const AddBatch = lazy(() => import('../pages/Inventory/products/AddBatch'));
+const UpdateBatch = lazy(() => import('../pages/Inventory/products/UpdateBatch'));
 
 const routes = [
     // dashboard
@@ -613,8 +616,24 @@ const routes = [
         element: <AddProduct />,
     },
     {
+        path: '/products/edit',
+        element: <UpdateProduct />,
+    },
+    {
         path: '/products/deleted',
         element: <DeletedProducts />,
+    },
+    {
+        path: '/products/batch/create',
+        element: (
+            <AddBatch/>
+        ),
+    },
+    {
+        path: '/products/batch/edit',
+        element: (
+            <UpdateBatch/>
+        ),
     },
     {
         path: '/products/batches',

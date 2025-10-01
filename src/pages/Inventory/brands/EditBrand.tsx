@@ -13,6 +13,7 @@ import ENDPOINTS from '../../../api/endpoints';
 import { Toast } from '../../../components/common/Toast';
 import { Loader } from '../../../components/common/Loader';
 import { capitalize } from 'lodash';
+import { FaHome } from 'react-icons/fa';
 
 interface Values {
     logo: File | null;
@@ -96,6 +97,11 @@ const EditBrand = () => {
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
+                    <Link to="/" className="text-primary hover:underline">
+                        <FaHome className="shrink-0 h-[18px] w-[18px]" />
+                    </Link>
+                </li>
+                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <Link to="/brands" className="text-primary hover:underline">
                         Brands
                     </Link>
@@ -111,7 +117,7 @@ const EditBrand = () => {
             <div className="pt-5 space-y-8">
                 <div className="panel">
                     {isLoading ? (
-                        <div className='flex flex-col items-center'>
+                        <div className="flex flex-col items-center">
                             <Loader classes="border-blue-600 mb-4" />
                             <span>Loading..</span>
                         </div>

@@ -11,6 +11,7 @@ import { ImageType } from 'react-images-uploading';
 import api from '../../../api/axios';
 import ENDPOINTS from '../../../api/endpoints';
 import { Toast } from '../../../components/common/Toast';
+import { FaHome } from 'react-icons/fa';
 
 interface Values {
     logo: File | null;
@@ -57,6 +58,11 @@ const AddBrand = () => {
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
+                    <Link to="/" className="text-primary hover:underline">
+                        <FaHome className="shrink-0 h-[18px] w-[18px]" />
+                    </Link>
+                </li>
+                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <Link to="/brands" className="text-primary hover:underline">
                         Brands
                     </Link>
@@ -83,7 +89,7 @@ const AddBrand = () => {
                             >
                                 {({ errors, submitCount, touched, values, isSubmitting }) => (
                                     <Form className="flex flex-col sm:flex-row space-y-10 sm:space-y-0 sm:space-x-10">
-                                        <div className='flex flex-col'>
+                                        <div className="flex flex-col">
                                             <FileUploader classes="" images={images} setImages={setImages} />
                                             {errors.logo && <div className="text-red-500 text-sm mt-1">{`${errors.logo} (jpg, jpeg, png)`}</div>}
                                         </div>

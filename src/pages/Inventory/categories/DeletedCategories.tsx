@@ -8,7 +8,7 @@ import 'tippy.js/dist/tippy.css';
 import IconTrashLines from '../../../components/Icon/IconTrashLines';
 import { Toast } from '../../../components/common/Toast';
 import { AxiosError } from 'axios';
-import { FaPlus } from 'react-icons/fa';
+import { FaHome, FaPlus } from 'react-icons/fa';
 import { deleteMessage } from '../../../components/common/sweetAlerts/deleteMessage';
 import IconRestore from '../../../components/Icon/IconRestore';
 import { capitalizeWords } from '../../../utils/capitalizeWords';
@@ -160,8 +160,8 @@ const DeletedCategories = () => {
             <div className="flex items-center justify-between">
                 <ul className="flex space-x-2 rtl:space-x-reverse">
                     <li>
-                        <Link to="#" className="text-primary hover:underline">
-                            Inventory
+                        <Link to="/" className="text-primary hover:underline">
+                            <FaHome className="shrink-0 h-[18px] w-[18px]" />
                         </Link>
                     </li>
                     <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">

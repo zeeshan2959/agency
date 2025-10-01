@@ -14,6 +14,7 @@ import { Toast } from '../../../components/common/Toast';
 import { SearchableSelect } from '../../../components/common/SearchableSelect';
 import { getBrands } from '../../../api/services/brands/brands';
 import { AxiosError } from 'axios';
+import { FaHome } from 'react-icons/fa';
 
 interface Values {
     logo: File | null;
@@ -91,6 +92,11 @@ const AddCategory = () => {
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
+                    <Link to="/" className="text-primary hover:underline">
+                        <FaHome className="shrink-0 h-[18px] w-[18px]" />
+                    </Link>
+                </li>
+                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <Link to="/categories" className="text-primary hover:underline">
                         Categories
                     </Link>

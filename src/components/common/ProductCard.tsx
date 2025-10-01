@@ -51,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {/* Content */}
             <div className="p-5">
                 <div className="flex gap-6">
-                    {product.images && product.images.length > 1 && (
+                    {product.images && product.images.length > 0 && (
                         <div className="flex gap-2 overflow-x-auto">
                             {product.images.slice(0, 1).map((img, idx) => (
                                 <img key={idx} src={`${import.meta.env.VITE_ASSET}${img}`} alt={`thumb-${idx}`} className="w-14 h-14 object-cover rounded-lg border" />

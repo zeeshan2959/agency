@@ -118,10 +118,10 @@ body.swal2-toast-shown .swal2-container.toast {
 }
 
 .sweet-alerts .swal2-icon:not(.swal2-error):not(.swal2-success) {
-    width: 2em !important;
+    width: 1.5em !important;
     line-height: 119px !important;
-    height: 2em !important;
-    margin: 0.25em auto 0.875em !important;
+    height: 1.5em !important;
+    margin: 0 auto !important;
 }
 
 .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
@@ -251,7 +251,7 @@ body.swal2-toast-shown .swal2-container.toast {
 }
 
 .sweet-alerts .swal2-icon-content {
-    font-size: 5.75rem !important;
+    font-size: 3.75rem !important;
 }
 .swal2-icon-content {
     @apply !text-xl;

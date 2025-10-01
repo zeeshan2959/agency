@@ -172,7 +172,7 @@ const LoginBoxed = () => {
                             </div> */}
                             <div className="text-center dark:text-white">
                                 Don't have an account ?&nbsp;
-                                <Link to="/auth/boxed-signup" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                <Link to="/register" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
                                     SIGN UP
                                 </Link>
                             </div>

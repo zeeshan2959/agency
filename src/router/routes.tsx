@@ -100,6 +100,29 @@ const MarkDownEditor = lazy(() => import('../pages/Forms/MarkDownEditor'));
 const DateRangePicker = lazy(() => import('../pages/Forms/DateRangePicker'));
 const Clipboard = lazy(() => import('../pages/Forms/Clipboard'));
 
+// New Routes by zeeshan
+
+// brands
+const Brands = lazy(() => import('../pages/Inventory/brands/Brands'));
+const AddBrand = lazy(() => import('../pages/Inventory/brands/AddBrand'));
+const EditBrand = lazy(() => import('../pages/Inventory/brands/EditBrand'));
+const DeletedBrands = lazy(() => import('../pages/Inventory/brands/DeletedBrands'));
+
+// categories
+const Categories = lazy(() => import('../pages/Inventory/categories/Categories'));
+const AddCategory = lazy(() => import('../pages/Inventory/categories/AddCategory'));
+const DeletedCategories = lazy(() => import('../pages/Inventory/categories/DeletedCategories'));
+const EditCategory = lazy(() => import('../pages/Inventory/categories/EditCategory'));
+
+// products
+const Products = lazy(() => import('../pages/Inventory/products/Products'));
+const AddProduct = lazy(() => import('../pages/Inventory/products/AddProduct'));
+const UpdateProduct = lazy(() => import('../pages/Inventory/products/UpdateProduct'));
+const DeletedProducts = lazy(() => import('../pages/Inventory/products/DeletedProducts'));
+const Batches = lazy(() => import('../pages/Inventory/products/Batches'));
+const AddBatch = lazy(() => import('../pages/Inventory/products/AddBatch'));
+const UpdateBatch = lazy(() => import('../pages/Inventory/products/UpdateBatch'));
+
 const routes = [
     // dashboard
     {
@@ -432,12 +455,12 @@ const routes = [
     },
     //Authentication
     {
-        path: '/auth/boxed-signin',
+        path: '/login',
         element: <LoginBoxed />,
         layout: 'blank',
     },
     {
-        path: '/auth/boxed-signup',
+        path: '/register',
         element: <RegisterBoxed />,
         layout: 'blank',
     },
@@ -541,6 +564,82 @@ const routes = [
         path: '*',
         element: <Error />,
         layout: 'blank',
+    },
+
+    // New Pages by Zeeshan
+
+    // Inventory
+
+    // brands
+    {
+        path: '/brands',
+        element: <Brands />,
+    },
+    {
+        path: '/brands/create',
+        element: <AddBrand />,
+    },
+    {
+        path: '/brands/edit',
+        element: <EditBrand />,
+    },
+    {
+        path: '/brands/deleted',
+        element: <DeletedBrands />,
+    },
+
+    // categories
+    {
+        path: '/categories',
+        element: <Categories />,
+    },
+    {
+        path: '/categories/create',
+        element: <AddCategory />,
+    },
+    {
+        path: '/categories/edit',
+        element: <EditCategory />,
+    },
+    {
+        path: '/categories/deleted',
+        element: <DeletedCategories />,
+    },
+
+    // Products
+    {
+        path: '/products',
+        element: <Products />,
+    },
+    {
+        path: '/products/create',
+        element: <AddProduct />,
+    },
+    {
+        path: '/products/edit',
+        element: <UpdateProduct />,
+    },
+    {
+        path: '/products/deleted',
+        element: <DeletedProducts />,
+    },
+    {
+        path: '/products/batch/create',
+        element: (
+            <AddBatch/>
+        ),
+    },
+    {
+        path: '/products/batch/edit',
+        element: (
+            <UpdateBatch/>
+        ),
+    },
+    {
+        path: '/products/batches',
+        element: (
+            <Batches/>
+        ),
     },
 ];
 

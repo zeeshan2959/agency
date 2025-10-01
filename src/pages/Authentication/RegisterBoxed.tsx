@@ -40,7 +40,7 @@ const RegisterBoxed = () => {
 
             if (res.status === 200) {
                 Toast('success', res.data.message || 'Signup successful!');
-                navigate('/auth/boxed-signin');
+                navigate('/login');
             }
         } catch (err) {
             const axiosError = err as AxiosError<any>;
@@ -181,7 +181,7 @@ const RegisterBoxed = () => {
                             </div> */}
                             <div className="text-center dark:text-white">
                                 Already have an account ?&nbsp;
-                                <Link to="/auth/boxed-signin" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                <Link to="/login" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
                                     SIGN IN
                                 </Link>
                             </div>

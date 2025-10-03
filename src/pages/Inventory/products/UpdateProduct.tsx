@@ -17,6 +17,7 @@ import MultipleFileUploader from '../../../components/common/MultipleFIleUploade
 import { containerTypes } from '../../../constants';
 import { getProductById } from '../../../api/services/products';
 import { FaHome } from 'react-icons/fa';
+import { capitalize } from 'lodash';
 
 interface Values {
     images: File | [] | null;
@@ -49,10 +50,10 @@ const UpdateProduct = () => {
                     res.data.data.data.map((item: any) => {
                         return {
                             value: item.id.toString(),
-                            label: item.name,
+                            label: capitalize(item.name),
                             categories: (item.categories || []).map((cat: any) => ({
                                 value: cat.id.toString(),
-                                label: cat.name,
+                                label: capitalize(cat.name),
                             })),
                         };
                     })
@@ -114,7 +115,7 @@ const UpdateProduct = () => {
         formData.append('category_id', values.category_id);
         formData.append('name', values.name);
         formData.append('size_ml', values.size_ml);
-        formData.append('reorder_level', values.reorder_level);
+        formData.append('reorder_level', values.reorder_level ||'0');
         formData.append('container_type', values.container_type);
         formData.append('description', values.description || '');
         if (images.length > 0) {
@@ -147,7 +148,8 @@ const UpdateProduct = () => {
         name: Yup.string().required('Please fill the Product Name'),
         brand_id: Yup.string().required('Please select a Brand'),
         category_id: Yup.string().required('Please select a Category'),
-        reorder_level: Yup.string().required('Please add reorder level'),
+        size_ml: Yup.string().required('Please add size'),
+        container_type: Yup.string().required('Please add container type'),
     });
 
     useEffect(() => {
@@ -239,6 +241,8 @@ const UpdateProduct = () => {
                                                         setCategoriesData(option?.categories || []);
                                                         setFieldValue('category_id', '');
                                                     }}
+                                                    errors={errors as Record<string, string>}
+                                                    touched={touched}
                                                 />
                                                 <SearchableSelect
                                                     id="category_id"
@@ -246,6 +250,8 @@ const UpdateProduct = () => {
                                                     label="Select Category"
                                                     options={categoriesData}
                                                     onChange={(option: any) => setFieldValue('category_id', option?.value || '')}
+                                                    errors={errors as Record<string, string>}
+                                                    touched={touched}
                                                 />
                                                 <Input
                                                     id="name"
@@ -263,6 +269,8 @@ const UpdateProduct = () => {
                                                     label="Select Container Type"
                                                     options={containerTypes}
                                                     onChange={(option: any) => setFieldValue('container_type', option?.value || '')}
+                                                    errors={errors as Record<string, string>}
+                                                    touched={touched}
                                                 />
                                                 <Input
                                                     id="size_ml"
@@ -283,8 +291,6 @@ const UpdateProduct = () => {
                                                     placeholder="Enter reorder level"
                                                     value={values.reorder_level}
                                                     onChange={(e) => setFieldValue('reorder_level', e.target.value)}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
                                                 <Input
                                                     id="description"

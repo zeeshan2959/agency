@@ -190,19 +190,14 @@ const AddProduct = () => {
                                                     name="category_id"
                                                     label="Select Category"
                                                     options={categoriesData}
+                                                    // value={values.category_id}
                                                     onChange={(option: any) => setFieldValue('category_id', option?.value || '')}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
-                                                />
+                                                    />
                                                 <Input
                                                     id="name"
                                                     name="name"
                                                     label="Product Name"
                                                     type="text"
-                                                    value={values.name}
-                                                    onChange={(e) => setFieldValue('name', e.target.value)}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
                                                 <SearchableSelect
                                                     id="container_type"
@@ -210,8 +205,6 @@ const AddProduct = () => {
                                                     label="Select Container Type"
                                                     options={containerTypes}
                                                     onChange={(option: any) => setFieldValue('container_type', option?.value || '')}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
                                                 <Input
                                                     id="size_ml"
@@ -219,10 +212,6 @@ const AddProduct = () => {
                                                     label="Size (ml)"
                                                     type="number"
                                                     placeholder="Enter size (ml)"
-                                                    value={values.size_ml}
-                                                    onChange={(e) => setFieldValue('size_ml', e.target.value)}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
                                                 <Input
                                                     id="reorder_level"
@@ -230,16 +219,12 @@ const AddProduct = () => {
                                                     label="Reorder Level"
                                                     type="number"
                                                     placeholder="Enter reorder level"
-                                                    value={values.reorder_level}
-                                                    onChange={(e) => setFieldValue('reorder_level', e.target.value)}
                                                 />
                                                 <Input
                                                     id="description"
                                                     name="description"
                                                     label="Description"
                                                     type="text"
-                                                    value={values.description || ''}
-                                                    onChange={(e) => setFieldValue('description', e.target.value)}
                                                     as="textarea"
                                                 />
                                                 <Button text={isSubmitting ? 'Updating...' : 'Add Product'} disabled={isSubmitting} />

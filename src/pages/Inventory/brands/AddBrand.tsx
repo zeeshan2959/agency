@@ -94,7 +94,7 @@ const AddBrand = () => {
                                             {errors.logo && <div className="text-red-500 text-sm mt-1">{`${errors.logo} (jpg, jpeg, png)`}</div>}
                                         </div>
                                         <div className="flex-1 flex flex-col space-y-5">
-                                            <Input id="name" name="name" label="Name" type="text" errors={errors} touched={touched} />
+                                            <Input id="name" name="name" label="Name" type="text" />
                                             <Input id="description" name="description" label="Description" type="text" as="textarea" />
                                             <Button text={isSubmitting ? 'Submitting...' : 'Add Brand'} disabled={isSubmitting} />
                                         </div>

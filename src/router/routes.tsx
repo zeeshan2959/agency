@@ -123,6 +123,12 @@ const Batches = lazy(() => import('../pages/Inventory/products/Batches'));
 const AddBatch = lazy(() => import('../pages/Inventory/products/AddBatch'));
 const UpdateBatch = lazy(() => import('../pages/Inventory/products/UpdateBatch'));
 
+// Retailers
+const Retailers = lazy(() => import('../pages/Retailers/Retailers'));
+const AddRetailer = lazy(() => import('../pages/Retailers/AddRetailer'));
+const UpdateRetailer = lazy(() => import('../pages/Retailers/EditRetailer'));
+const DeletedRetailers = lazy(() => import('../pages/Retailers/DeletedRetailers'));
+
 const routes = [
     // dashboard
     {
@@ -639,6 +645,32 @@ const routes = [
         path: '/products/batches',
         element: (
             <Batches/>
+        ),
+    },
+
+    // Retailers
+    {
+        path: '/retailers',
+        element: (
+            <Retailers/>
+        ),
+    },
+    {
+        path: '/retailers/create',
+        element: (
+            <AddRetailer/>
+        ),
+    },
+    {
+        path: '/retailers/edit',
+        element: (
+            <UpdateRetailer/>
+        ),
+    },
+    {
+        path: '/retailers/deleted',
+        element: (
+            <DeletedRetailers/>
         ),
     },
 ];

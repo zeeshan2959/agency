@@ -11,6 +11,9 @@ const ENDPOINTS = {
     //   products
     PRODUCTS: 'products',
     PRODUCT_BATCHES: 'product-batches',
+
+    // Retailers
+    RETAILERS: 'retailers'
 };
 
 export default ENDPOINTS;

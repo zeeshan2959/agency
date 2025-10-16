@@ -14,6 +14,7 @@ import IconRestore from '../../../components/Icon/IconRestore';
 import { capitalizeWords } from '../../../utils/capitalizeWords';
 import { capitalize } from 'lodash';
 import { deleteCategoryPermanently, getDeletedCategories, restoreCategory, restoreMultipleCategories } from '../../../api/services/categories';
+import { PiImageFill } from "react-icons/pi";
 
 type Brand = {
     id: number;
@@ -196,7 +197,11 @@ const DeletedCategories = () => {
                         sortable: false,
                         render: (row: any) => (
                             <>
-                                <img src={`${import.meta.env.VITE_ASSET}${row.logo}`} alt={`Category logo`} className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300" />
+                                {row.logo ? (
+                                    <img src={`${import.meta.env.VITE_ASSET}${row.logo}`} alt="Category logo" className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300" />
+                                ) : (
+                                    <PiImageFill className='h-10 w-10' />
+                                )}
                             </>
                         ),
                     },

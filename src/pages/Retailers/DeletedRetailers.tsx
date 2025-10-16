@@ -14,17 +14,17 @@ import { deleteMessage } from '../../components/common/sweetAlerts/deleteMessage
 import IconTrashLines from '../../components/Icon/IconTrashLines';
 import { capitalizeWords } from '../../utils/capitalizeWords';
 import { deleteRetailersPermanently, getDeletedRetailers, restoreMultipleRetailers, restoreRetailers } from '../../api/services/retailers';
+import { PiImageFill } from 'react-icons/pi';
 
 type Retailer = {
     id: number;
     profile_image?: string;
     name?: string;
-    retailer_profile?:{
+    retailer_profile?: {
         shop_name?: string;
-        phone?:string;
-        shop_address?:string;
-
-    }
+        phone?: string;
+        shop_address?: string;
+    };
     status?: string;
     isLoading?: boolean;
 };
@@ -197,11 +197,15 @@ const DeletedRetailers = () => {
                         sortable: false,
                         render: (row: any) => (
                             <>
-                                <img
-                                    src={`${import.meta.env.VITE_ASSET}${row.profile_image}`}
-                                    alt={`profile image`}
-                                    className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300"
-                                />
+                                {row.profile_image ? (
+                                    <img
+                                        src={`${import.meta.env.VITE_ASSET}${row.profile_image}`}
+                                        alt="Profile image"
+                                        className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300"
+                                    />
+                                ) : (
+                                    <PiImageFill className='h-10 w-10' />
+                                )}
                             </>
                         ),
                     },

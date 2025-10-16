@@ -15,6 +15,7 @@ import { FaHome, FaPlus } from 'react-icons/fa';
 import { deleteMessage } from '../../../components/common/sweetAlerts/deleteMessage';
 import { capitalizeWords } from '../../../utils/capitalizeWords';
 import { capitalize } from 'lodash';
+import { PiImageFill } from 'react-icons/pi';
 
 type Brand = {
     id: number;
@@ -147,7 +148,13 @@ const Brands = () => {
                         accessor: 'logo',
                         sortable: false,
                         render: (row: any) => (
-                            <img src={`${import.meta.env.VITE_ASSET}${row.logo}`} alt="Brand logo" className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300" />
+                            <>
+                                {row.logo ? (
+                                    <img src={`${import.meta.env.VITE_ASSET}${row.logo}`} alt="Brand logo" className="h-10 w-10 object-cover aspect-square rounded-full border border-gray-300" />
+                                ) : (
+                                    <PiImageFill className="h-10 w-10" />
+                                )}
+                            </>
                         ),
                     },
                     { accessor: 'name', sortable: true, render: (row: any) => <span>{capitalizeWords(row.name)}</span> },

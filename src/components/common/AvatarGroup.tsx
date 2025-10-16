@@ -1,4 +1,5 @@
 import React from 'react';
+import { PiImageFill } from 'react-icons/pi';
 interface AvatarGroupProps {
   avatars: string[];
   onClick?: (images: string[]) => void;
@@ -30,7 +31,7 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({ avatars, onClick }) => {
           )}
         </>
       ) : (
-        <span className="text-sm text-red-400">No image</span>
+        <PiImageFill className="h-10 w-10" />
       )}
     </div>
   );

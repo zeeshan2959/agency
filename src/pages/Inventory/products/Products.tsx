@@ -163,8 +163,8 @@ const Products = () => {
                             </>
                         ),
                     },
-                    { accessor: 'Product Name', sortable: true, render: (row: any) => <span>{capitalizeWords(row.name)}</span> },
-                    { accessor: 'Brand', sortable: true, render: (row: any) => <span>{capitalizeWords(row.brand.name)}</span> },
+                    { accessor: 'Product Name', sortable: true, render: (row: any) => <span>{capitalizeWords(row?.name)}</span> },
+                    { accessor: 'Brand', sortable: true, render: (row: any) => <span>{capitalizeWords(row?.brand?.name)}</span> },
                     { accessor: 'Category', sortable: true, render: (row: any) => <span>{capitalizeWords(row.category.name)}</span> },
                     { accessor: 'Size', sortable: true, render: (row: any) => <span>{`${row.size_ml} (ml)`}</span> },
                     { accessor: 'Reorder level', sortable: true, render: (row: any) => <span>{`${row.reorder_level}`}</span> },

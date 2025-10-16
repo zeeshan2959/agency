@@ -133,7 +133,7 @@ const AddCategory = () => {
                                             </div>
                                             <div className="flex-1 flex flex-col space-y-5">
                                                 <SearchableSelect id={'brand_id'} name="brand_id" label="Select Brand" options={brandsData} />
-                                                <Input id="name" name="name" label="Category Name" type="text" errors={errors} touched={touched} />
+                                                <Input id="name" name="name" label="Category Name" type="text" />
                                                 <Input id="description" name="description" label="Description" type="text" as="textarea" />
                                                 <Button text={isSubmitting ? 'Submitting...' : 'Add Category'} disabled={isSubmitting} />
                                             </div>

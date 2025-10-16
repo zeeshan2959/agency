@@ -134,8 +134,6 @@ const AddBatch = () => {
                                                     label="Expiry Date"
                                                     placeholder="Enter Expiry Date"
                                                     type="date"
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <SearchableSelect id="pack_type" name="pack_type" label="Select Pack Type" options={packTypes} />
@@ -146,8 +144,6 @@ const AddBatch = () => {
                                                     label="Size"
                                                     type="number"
                                                     placeholder="Enter Pack Size"
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <Input
@@ -156,8 +152,6 @@ const AddBatch = () => {
                                                     label="Pack Quantity"
                                                     type="number"
                                                     placeholder="Enter Pack Quantity"
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <Input
@@ -166,8 +160,6 @@ const AddBatch = () => {
                                                     label="Cost Price"
                                                     type="number"
                                                     placeholder="Enter Cost Price"
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <Input
@@ -176,8 +168,6 @@ const AddBatch = () => {
                                                     label="Price Per Unit"
                                                     type="number"
                                                     placeholder="Enter Price Per Unit"
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <div className="col-span-3 flex items-center justify-end">

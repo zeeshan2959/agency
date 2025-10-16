@@ -33,6 +33,7 @@ const EditBrand = () => {
         try {
             const res = await api.get(`${ENDPOINTS.BRANDS}/${id}`);
             if (res.status === 200) {
+                console.log(res.data.data)
                 setBrand(res.data.data);
                 setImages([
                     {
@@ -140,7 +141,7 @@ const EditBrand = () => {
                                             {errors.logo && <div className="text-red-500 text-sm mt-1">{`${errors.logo} (jpg, jpeg, png)`}</div>}
                                         </div>
                                         <div className="flex-1 flex flex-col space-y-5">
-                                            <Input id="name" name="name" label="Name" type="text" errors={errors} touched={touched} />
+                                            <Input id="name" name="name" label="Name" type="text" />
                                             <Input id="description" name="description" label="Description" type="text" as="textarea" />
                                             <Button text={isSubmitting ? 'Submitting...' : 'Update Brand'} disabled={isSubmitting} />
                                         </div>

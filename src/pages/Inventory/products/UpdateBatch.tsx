@@ -129,11 +129,6 @@ const UpdateBatch = () => {
                                                     label="Expiry Date"
                                                     type="date"
                                                     placeholder="Enter Expiry Date"
-                                                    value={values.expiry_date}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <SearchableSelect id="pack_type" name="pack_type" label="Select Pack Type" options={packTypes} />
@@ -144,11 +139,6 @@ const UpdateBatch = () => {
                                                     label="Units Per Pack"
                                                     type="number"
                                                     placeholder="Enter Pack Size"
-                                                    value={values.pack_size}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <Input
@@ -157,11 +147,6 @@ const UpdateBatch = () => {
                                                     label="Pack Quantity"
                                                     type="number"
                                                     placeholder="Enter Pack Quantity"
-                                                    value={values.pack_qty}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <Input
@@ -170,11 +155,6 @@ const UpdateBatch = () => {
                                                     label="Cost Price"
                                                     type="number"
                                                     placeholder="Enter Cost Price"
-                                                    value={values.cost_price}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
 
                                                 <Input
@@ -183,11 +163,6 @@ const UpdateBatch = () => {
                                                     label="Price Per Unit"
                                                     type="number"
                                                     placeholder="Enter Price Per Unit"
-                                                    value={values.price_per_unit}
-                                                    onChange={handleChange}
-                                                    onBlur={handleBlur}
-                                                    errors={errors as Record<string, string>}
-                                                    touched={touched}
                                                 />
                                                 <div className="col-span-3 flex items-center justify-end">
                                                     <Button text={isSubmitting ? 'Submitting...' : 'Update Batch'} disabled={isSubmitting} />

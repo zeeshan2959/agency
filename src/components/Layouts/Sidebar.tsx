@@ -208,26 +208,38 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
-                            {/* <li className="nav-item">
-                                <ul>
-                                    <li className="nav-item">
-                                        <NavLink to="/inventory/brands" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuChat className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Brands')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
-                                    <li className="nav-item">
-                                        <NavLink to="/inventory/category" className="group">
-                                            <div className="flex items-center">
-                                                <IconMenuChat className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Category')}</span>
-                                            </div>
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li> */}
+                            {/* Retailers */}
+                            <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
+                                <IconMinus className="w-4 h-5 flex-none hidden" />
+                                <span>{t('retailers')}</span>
+                            </h2>
+                            {/* Retailers */}
+                            <li className="menu nav-item">
+                                <button type="button" className={`${currentMenu === 'retailers' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('retailers')}>
+                                    <div className="flex items-center">
+                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Retailers')}</span>
+                                    </div>
+
+                                    <div className={currentMenu !== 'retailers' ? 'rtl:rotate-90 -rotate-90' : ''}>
+                                        <IconCaretDown />
+                                    </div>
+                                </button>
+
+                                <AnimateHeight duration={300} height={currentMenu === 'retailers' ? 'auto' : 0}>
+                                    <ul className="sub-menu text-gray-500">
+                                        <li>
+                                            <NavLink to="/retailers">{t('Retailers')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/retailers/create">{t('Add Retailer')}</NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/retailers/deleted">{t('Deleted Retailers')}</NavLink>
+                                        </li>
+                                    </ul>
+                                </AnimateHeight>
+                            </li>
                             {/* Apps  */}
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />

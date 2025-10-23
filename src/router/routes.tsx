@@ -90,8 +90,8 @@ const routes = [
     //Authentication
     {
         path: '/',
-        element: <LoginBoxed />,
-        layout: 'blank',
+        element: <Brands />,
+        // layout: 'blank',
     },
     {
         path: '/login',

@@ -20,3 +20,12 @@ export const signInUser = async (values:LoginValues) => {
     return await api.post(ENDPOINTS.LOGIN, values);
 };
 
+export const checkAuth = async (): Promise<boolean> => {
+  try {
+    const response = await api.get('/brands');
+    return response.status === 200;
+  } catch (err: any) {
+    return false;
+  }
+};
+

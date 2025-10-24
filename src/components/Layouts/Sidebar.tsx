@@ -1,7 +1,7 @@
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toggleSidebar } from '../../store/themeConfigSlice';
 import AnimateHeight from 'react-animate-height';
 import { IRootState } from '../../store';
@@ -10,8 +10,10 @@ import IconCaretsDown from '../Icon/IconCaretsDown';
 import IconCaretDown from '../Icon/IconCaretDown';
 import IconMenuDashboard from '../Icon/Menu/IconMenuDashboard';
 import IconMinus from '../Icon/IconMinus';
-import IconMenuAuthentication from '../Icon/Menu/IconMenuAuthentication';
-import IconMenuBrand from '../Icon/Menu/IconMenuBrand';
+import IconMenuCategory from '../Icon/Menu/IconMenuCategory';
+import IconMenuProducts from '../Icon/Menu/IconMenuProducts';
+import IconMenuRetailer from '../Icon/Menu/IconMenuRetailers';
+import IconMenuBrands from '../Icon/Menu/IconMenuBrands';
 
 const Sidebar = () => {
     const [currentMenu, setCurrentMenu] = useState<string>('');
@@ -20,6 +22,7 @@ const Sidebar = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const toggleMenu = (value: string) => {
         setCurrentMenu((oldValue) => {
             return oldValue === value ? '' : value;
@@ -73,25 +76,19 @@ const Sidebar = () => {
                     <PerfectScrollbar className="h-[calc(100vh-80px)] relative">
                         <ul className="relative font-semibold space-y-0.5 p-4 py-0">
                             <li className="menu nav-item">
-                                <button type="button" className={`${currentMenu === 'dashboard' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('dashboard')}>
+                                <NavLink
+                                    to="/"
+                                    end
+                                    className={({ isActive }) => `${isActive ? 'active' : ''} nav-link group w-full`}
+                                    onClick={() => setCurrentMenu('')}
+                                >
                                     <div className="flex items-center">
                                         <IconMenuDashboard className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('dashboard')}</span>
                                     </div>
-
-                                    <div className={currentMenu !== 'dashboard' ? 'rtl:rotate-90 -rotate-90' : ''}>
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-
-                                <AnimateHeight duration={300} height={currentMenu === 'dashboard' ? 'auto' : 0}>
-                                    <ul className="sub-menu text-gray-500">
-                                        <li>
-                                            <NavLink to="/">{t('sales')}</NavLink>
-                                        </li>
-                                    </ul>
-                                </AnimateHeight>
+                                </NavLink>
                             </li>
+
                             {/* Inventory */}
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
@@ -101,7 +98,7 @@ const Sidebar = () => {
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'brands' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('brands')}>
                                     <div className="flex items-center">
-                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <IconMenuBrands className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Brands')}</span>
                                     </div>
 
@@ -128,7 +125,7 @@ const Sidebar = () => {
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'categories' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('categories')}>
                                     <div className="flex items-center">
-                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <IconMenuCategory className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Categories')}</span>
                                     </div>
 
@@ -155,7 +152,7 @@ const Sidebar = () => {
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'products' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('products')}>
                                     <div className="flex items-center">
-                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <IconMenuProducts className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Products')}</span>
                                     </div>
 
@@ -187,7 +184,7 @@ const Sidebar = () => {
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'retailers' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('retailers')}>
                                     <div className="flex items-center">
-                                        <IconMenuBrand className="group-hover:!text-primary shrink-0" />
+                                        <IconMenuRetailer className="group-hover:!text-primary shrink-0" />
                                         <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Retailers')}</span>
                                     </div>
 
@@ -206,36 +203,6 @@ const Sidebar = () => {
                                         </li>
                                         <li>
                                             <NavLink to="/retailers/deleted">{t('Deleted Retailers')}</NavLink>
-                                        </li>
-                                    </ul>
-                                </AnimateHeight>
-                            </li>
-
-
-                            <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
-                                <IconMinus className="w-4 h-5 flex-none hidden" />
-                                <span>{t('User')}</span>
-                            </h2>
-
-                            <li className="menu nav-item">
-                                <button type="button" className={`${currentMenu === 'auth' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('auth')}>
-                                    <div className="flex items-center">
-                                        <IconMenuAuthentication className="group-hover:!text-primary shrink-0" />
-                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('authentication')}</span>
-                                    </div>
-
-                                    <div className={currentMenu !== 'auth' ? 'rtl:rotate-90 -rotate-90' : ''}>
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-
-                                <AnimateHeight duration={300} height={currentMenu === 'auth' ? 'auto' : 0}>
-                                    <ul className="sub-menu text-gray-500">
-                                        <li>
-                                            <NavLink to="/login">{t('login')}</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to="/register">{t('register')}</NavLink>
                                         </li>
                                     </ul>
                                 </AnimateHeight>

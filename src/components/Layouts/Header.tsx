@@ -842,8 +842,8 @@ const Header = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/pages/maintenence" target="_blank">
-                                    {t('maintenence')}
+                                <NavLink to="/pages/maintenance" target="_blank">
+                                    {t('maintenance')}
                                 </NavLink>
                             </li>
                             <li className="relative">

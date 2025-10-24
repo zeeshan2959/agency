@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { setPageTitle } from '../../store/themeConfigSlice';
 import { IRootState } from '../../store';
 
-const Maintenence = () => {
+const Maintenance = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageTitle('Maintenance'));
@@ -39,4 +39,4 @@ const Maintenence = () => {
     );
 };
 
-export default Maintenence;
+export default Maintenance;

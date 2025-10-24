@@ -21,17 +21,16 @@ const ComingSoonCover = lazy(() => import('../pages/Pages/ComingSoonCover'));
 const ERROR404 = lazy(() => import('../pages/Pages/Error404'));
 const ERROR500 = lazy(() => import('../pages/Pages/Error500'));
 const ERROR503 = lazy(() => import('../pages/Pages/Error503'));
-const Maintenence = lazy(() => import('../pages/Pages/Maintenence'));
+const Maintenance = lazy(() => import('../pages/Pages/Maintenance'));
 const LoginBoxed = lazy(() => import('../pages/Authentication/LoginBoxed'));
 const RegisterBoxed = lazy(() => import('../pages/Authentication/RegisterBoxed'));
 const UnlockBoxed = lazy(() => import('../pages/Authentication/UnlockBox'));
 const RecoverIdBoxed = lazy(() => import('../pages/Authentication/RecoverIdBox'));
-const LoginCover = lazy(() => import('../pages/Authentication/LoginCover'));
-const RegisterCover = lazy(() => import('../pages/Authentication/RegisterCover'));
-const RecoverIdCover = lazy(() => import('../pages/Authentication/RecoverIdCover'));
-const UnlockCover = lazy(() => import('../pages/Authentication/UnlockCover'));
 
 // New Routes by zeeshan
+
+// dashboard
+const Dashboard = lazy(() => import('../pages/Dashboard'));
 
 // brands
 const Brands = lazy(() => import('../pages/Inventory/brands/Brands'));
@@ -61,12 +60,6 @@ const UpdateRetailer = lazy(() => import('../pages/Retailers/EditRetailer'));
 const DeletedRetailers = lazy(() => import('../pages/Retailers/DeletedRetailers'));
 
 const routes = [
-    // dashboard
-    // {
-    //     path: '/',
-    //     element: <LoginBoxed />,
-    // },
-
     {
         path: '/pages/error404',
         element: <ERROR404 />,
@@ -83,25 +76,28 @@ const routes = [
         layout: 'blank',
     },
     {
-        path: '/pages/maintenence',
-        element: <Maintenence />,
+        path: '/pages/maintenance',
+        element: <Maintenance />,
         layout: 'blank',
     },
     //Authentication
     {
         path: '/',
-        element: <Brands />,
-        // layout: 'blank',
+        element: <Dashboard />,
+        auth: 'private',
+
     },
     {
         path: '/login',
         element: <LoginBoxed />,
         layout: 'blank',
+        auth: 'public',
     },
     {
         path: '/register',
         element: <RegisterBoxed />,
         layout: 'blank',
+        auth: 'public',
     },
     {
         path: '/auth/boxed-lockscreen',
@@ -113,26 +109,6 @@ const routes = [
         element: <RecoverIdBoxed />,
         layout: 'blank',
     },
-    {
-        path: '/auth/cover-login',
-        element: <LoginCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/cover-register',
-        element: <RegisterCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/cover-lockscreen',
-        element: <UnlockCover />,
-        layout: 'blank',
-    },
-    {
-        path: '/auth/cover-password-reset',
-        element: <RecoverIdCover />,
-        layout: 'blank',
-    },
 
     // New Pages by Zeeshan
 
@@ -142,72 +118,81 @@ const routes = [
     {
         path: '/brands',
         element: <Brands />,
+        auth: 'private',
     },
     {
         path: '/brands/create',
         element: <AddBrand />,
+        auth: 'private',
     },
     {
         path: '/brands/edit',
         element: <EditBrand />,
+        auth: 'private',
     },
     {
         path: '/brands/deleted',
         element: <DeletedBrands />,
+        auth: 'private',
     },
 
     // categories
     {
         path: '/categories',
         element: <Categories />,
+        auth: 'private',
     },
     {
         path: '/categories/create',
         element: <AddCategory />,
+        auth: 'private',
     },
     {
         path: '/categories/edit',
         element: <EditCategory />,
+        auth: 'private',
     },
     {
         path: '/categories/deleted',
         element: <DeletedCategories />,
+        auth: 'private',
     },
 
     // Products
     {
         path: '/products',
         element: <Products />,
+        auth: 'private',
     },
     {
         path: '/products/create',
         element: <AddProduct />,
+        auth: 'private',
     },
     {
         path: '/products/edit',
         element: <UpdateProduct />,
+        auth: 'private',
     },
     {
         path: '/products/deleted',
         element: <DeletedProducts />,
+        auth: 'private',
     },
     {
         path: '/products/batch/create',
-        element: (
-            <AddBatch/>
-        ),
+        element: <AddBatch/>,
+        auth: 'private',
     },
     {
         path: '/products/batch/edit',
-        element: (
-            <UpdateBatch/>
-        ),
+        element: <UpdateBatch/>,
+        auth: 'private',
     },
     {
         path: '/products/batches',
-        element: (
-            <Batches/>
-        ),
+        element: <Batches/>,
+        auth: 'private',
     },
 
     // Retailers
@@ -216,24 +201,28 @@ const routes = [
         element: (
             <Retailers/>
         ),
+        auth: 'private',
     },
     {
         path: '/retailers/create',
         element: (
             <AddRetailer/>
         ),
+        auth: 'private',
     },
     {
         path: '/retailers/edit',
         element: (
             <UpdateRetailer/>
         ),
+        auth: 'private',
     },
     {
         path: '/retailers/deleted',
         element: (
             <DeletedRetailers/>
         ),
+        auth: 'private',
     },
 ];
 

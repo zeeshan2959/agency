@@ -18,7 +18,7 @@ import * as Yup from 'yup';
 import { Toast } from '../../components/common/Toast';
 import { AxiosError } from 'axios';
 import { signInUser } from '../../api/services/auth/auth';
-
+import { useAuth } from '../../context/AuthContext';
 
 interface Values {
     email: string;
@@ -27,6 +27,7 @@ interface Values {
 
 const LoginBoxed = () => {
     const dispatch = useDispatch();
+    const { refreshAuth } = useAuth();
     useEffect(() => {
         dispatch(setPageTitle('Login Boxed'));
     });
@@ -42,6 +43,8 @@ const LoginBoxed = () => {
 
             if (res.status === 200) {
                 Toast('success', res.data.message || 'Login successful!');
+                await signInUser(values);
+                await refreshAuth();
                 navigate('/');
             }
         } catch (err) {

@@ -121,7 +121,7 @@ const LoginBoxed = () => {
                                             </label>
                                         </div>
                                         <button disabled={isSubmitting} type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                            {isSubmitting ? 'LOADING...' : 'Login'}
+                                            {isSubmitting ? 'LOGGING IN...' : 'Login'}
                                         </button>
                                     </Form>
                                 )}

@@ -1,29 +1,27 @@
-import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { checkAuth } from '../api/services/auth/auth';
+import { useAuth } from '../context/AuthContext';
+import DefaultLoader from '../components/common/DefaultLoader';
 
 interface PublicRouteProps {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
 const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const { loading, isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const verify = async () => {
-      const ok = await checkAuth();
-      setIsAuthenticated(ok);
-    };
-    verify();
-  }, []);
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <DefaultLoader />
+            </div>
+        );
+    }
 
-  if (isAuthenticated === null) return;
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
 
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <>{children}</>;
+    return <>{children}</>;
 };
 
 export default PublicRoute;

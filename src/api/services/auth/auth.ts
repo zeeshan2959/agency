@@ -19,6 +19,12 @@ export const signInUser = async (values:LoginValues) => {
     await getCsrfCookie();
     return await api.post(ENDPOINTS.LOGIN, values);
 };
+export const signOutUser = async () => {
+    return await api.post(ENDPOINTS.LOGOUT);
+};
+export const signOutUserFromAllDevices = async () => {
+    return await api.post(`${ENDPOINTS.LOGOUT}-all`);
+};
 
 export const checkAuth = async (): Promise<boolean> => {
   try {

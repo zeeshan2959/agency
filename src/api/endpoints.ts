@@ -1,5 +1,6 @@
 const ENDPOINTS = {
     LOGIN: 'login',
+    LOGOUT: 'logout',
     REGISTER: 'register',
     BRANDS: 'brands',
     DELETEDBRANDS: 'brands/trashed',
